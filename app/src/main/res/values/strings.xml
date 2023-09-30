@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">StoryCompleter</string>
+    <string name="story_logo">Story Logo</string>
+    <string name="splash_logo">Crafting Stories Together</string>
 </resources>

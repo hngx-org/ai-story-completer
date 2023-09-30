@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.newton.storycompleter.ui.navigation.AiStoryApp
+import com.newton.storycompleter.ui.navigation.StoryAppNavHost
 import com.newton.storycompleter.ui.theme.StoryCompleterTheme
 
 class MainActivity : ComponentActivity() {
@@ -16,7 +17,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             StoryCompleterTheme {
-                AiStoryApp(navController = rememberNavController())
+                StoryAppNavHost(navController = rememberNavController())
 
             }
         }

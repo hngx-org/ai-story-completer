@@ -15,6 +15,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.newton.storycompleter.ui.onboarding.SplashScreen
 
 @Composable
 fun StoryAppNavHost(
@@ -31,9 +32,13 @@ fun StoryAppNavHost(
         // TODO : Add your navigation graph as appropriate
 
         composable(route = SplashScreen.route) {
-            Column (){
+           com.newton.storycompleter.ui.onboarding.SplashScreen(onNext = {
+               navController.navigate(route = MainScreen.route){
+                   launchSingleTop = true
+                   popUpTo(SplashScreen.route){inclusive = true}
+               }
 
-            }
+           })
         }
         composable(route = MainScreen.route) {
             Column (){

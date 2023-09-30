@@ -10,6 +10,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.newton.storycompleter.ui.navigation.StoryAppNavHost
 import com.newton.storycompleter.ui.onboarding.SplashScreen
 import com.newton.storycompleter.ui.theme.StoryCompleterTheme
 
@@ -23,7 +25,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    SplashScreen(onNext = { /*TODO*/ })
+                    StoryAppNavHost(navController = rememberNavController())
                 }
             }
         }

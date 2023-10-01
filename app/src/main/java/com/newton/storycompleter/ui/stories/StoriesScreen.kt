@@ -30,11 +30,14 @@ import com.newton.storycompleter.ui.theme.StoryCompleterTheme
 @Composable
 fun StoriesScreen(
     modifier: Modifier = Modifier,
-    stories: List<String>, //Todo add the state class here,
     onStoryClick: (String) -> Unit, //Todo add state
     onCreateStoryClick: () -> Unit, //Todo navigate to the next screen
 ) {
-
+val stories = listOf( "The Lost City",
+        "The Secret of the Island",
+        "The Curse of the Castle",
+        "The Haunted Mansion",
+        "The Mysterious Stranger")
     val scrollBehaviour = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     Scaffold(
@@ -89,6 +92,6 @@ private fun PreviewStoriesScreen() {
         val stories =
             listOf("Kid Danger", "SpongeBob SquarePants", "Sofia the first living in a castle")
 
-        StoriesScreen(stories = stories, onStoryClick = { }, onCreateStoryClick = { })
+        StoriesScreen( onStoryClick = { }, onCreateStoryClick = { })
     }
 }

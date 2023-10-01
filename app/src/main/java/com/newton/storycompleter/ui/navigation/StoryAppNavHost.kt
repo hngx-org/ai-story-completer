@@ -16,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.newton.storycompleter.ui.onboarding.SplashScreen
+import com.newton.storycompleter.ui.stories.StoriesScreen
 
 @Composable
 fun StoryAppNavHost(
@@ -41,9 +42,13 @@ fun StoryAppNavHost(
            })
         }
         composable(route = MainScreen.route) {
-            Column (){
+           StoriesScreen(onStoryClick ={
 
-            }
+               navController.navigate(route =ReadingModeScreen.route )
+
+           } , onCreateStoryClick = {
+               navController.navigate(route =AiStoryScreen.route)
+           })
         }
 
         composable(route = AiStoryScreen.route) {

@@ -8,12 +8,12 @@ object SplashScreen:AiStoryAppDestination{
     override val route="splash"
     // TODO : Add other information for this route e.g any navigation argument needed
 }
-object MainScreen:AiStoryAppDestination{
-    override val route="ai_main"
+object StoriesListScreen:AiStoryAppDestination{
+    override val route="ai_stories"
     // TODO : Add other information for this route e.g any navigation argument needed
 }
-object AiStoryScreen:AiStoryAppDestination{
-    override val route="ai_story"
+object EditStoryScreen:AiStoryAppDestination{
+    override val route="ai_edit_story"
     // TODO : Add other information for this route e.g any navigation argument needed
 }
 object ReadingModeScreen:AiStoryAppDestination{

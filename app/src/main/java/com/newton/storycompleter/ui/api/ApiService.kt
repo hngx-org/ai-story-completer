@@ -8,6 +8,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
+import org.json.JSONArray
+import org.json.JSONObject
 import java.io.IOException
 
 
@@ -44,7 +46,10 @@ class AiRepository {
 
             override fun onResponse(call: Call, response: Response) {
                 val responseText = response.body?.string() ?: ""
-                callback.onResponse(responseText)
+                val jsonObject = JSONObject(responseText)
+                val jsonArray:JSONArray = jsonObject.getJSONArray("choices")
+                val textResult = jsonArray.getJSONObject(0).getString("text")
+                callback.onResponse(textResult)
             }
         })
 

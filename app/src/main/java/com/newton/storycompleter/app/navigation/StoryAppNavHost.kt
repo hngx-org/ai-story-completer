@@ -71,7 +71,7 @@ fun StoryAppNavHost(
                 updateState = viewModel::updateState,
                 isEdit = false,
                 onFinishClick = { },
-                onGenerateClick = { },
+                onGenerateClick = viewModel::generateText,
                 onClose = onClose,
                 onDecreaseCandidate = { },
                 onIncreaseCandidate = { },

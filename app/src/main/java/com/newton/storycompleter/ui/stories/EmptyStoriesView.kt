@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.newton.storycompleter.R
-import com.newton.storycompleter.ui.theme.StoryCompleterTheme
+import com.newton.storycompleter.app.theme.StoryCompleterTheme
 
 @Composable
 fun EmptyStoriesView(

@@ -6,7 +6,6 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,21 +25,20 @@ import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.newton.storycompleter.R
-import com.newton.storycompleter.ui.theme.GradientColors
+import com.newton.storycompleter.app.theme.GradientColors
 import kotlinx.coroutines.delay
 
 
 private const val SPLASH_DURATION = 2000
-@OptIn(ExperimentalTextApi::class)
+
 @Composable
 fun SplashScreen(
-    onNext: () -> Unit, //Todo Add the Navigation in the nav graph
+    onNext: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
 

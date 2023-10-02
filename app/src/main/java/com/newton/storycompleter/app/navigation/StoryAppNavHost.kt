@@ -1,4 +1,4 @@
-package com.newton.storycompleter.ui.navigation
+package com.newton.storycompleter.app.navigation
 
 import android.content.Context
 import androidx.compose.foundation.layout.Column
@@ -9,13 +9,17 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.newton.storycompleter.ui.onboarding.SplashScreen
+import com.newton.storycompleter.ui.editstory.EditStoryScreen
+import com.newton.storycompleter.ui.editstory.EditStoryViewModel
 import com.newton.storycompleter.ui.stories.StoriesScreen
 
 @Composable
@@ -34,27 +38,45 @@ fun StoryAppNavHost(
 
         composable(route = SplashScreen.route) {
            com.newton.storycompleter.ui.onboarding.SplashScreen(onNext = {
-               navController.navigate(route = MainScreen.route){
-                   launchSingleTop = true
+               navController.navigate(route = StoriesListScreen.route){
                    popUpTo(SplashScreen.route){inclusive = true}
                }
 
            })
         }
-        composable(route = MainScreen.route) {
+        composable(route = StoriesListScreen.route) {
            StoriesScreen(onStoryClick ={
 
                navController.navigate(route =ReadingModeScreen.route )
 
            } , onCreateStoryClick = {
-               navController.navigate(route =AiStoryScreen.route)
+               navController.navigate(route =EditStoryScreen.route)
            })
         }
 
-        composable(route = AiStoryScreen.route) {
-            Column (){
+        composable(route = EditStoryScreen.route) {
+            val viewModel = viewModel<EditStoryViewModel>()
+            val state = viewModel.state.collectAsState().value
 
+            val onClose: () -> Unit = remember {
+                {
+                    navController.navigateUp()
+                }
             }
+
+            EditStoryScreen(
+                state = state,
+                updateState = viewModel::updateState,
+                isEdit = false,
+                onFinishClick = { },
+                onGenerateClick = { },
+                onClose = onClose,
+                onDecreaseCandidate = { },
+                onIncreaseCandidate = { },
+                onDecreaseWords = { },
+                onIncreaseWords = { },
+                onPremiumClicked = { }
+            )
         }
         composable(route = ReadingModeScreen.route) {
             Column (){

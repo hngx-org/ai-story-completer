@@ -20,3 +20,11 @@ object ReadingModeScreen: AiStoryAppDestination {
     override val route="reading_mode"
     // TODO : Add other information for this route e.g any navigation argument needed
 }
+object SignInScreen:AiStoryAppDestination{
+    override val route="signin"
+    // TODO : Add other information for this route e.g any navigation argument needed
+}
+object SignUpScreen:AiStoryAppDestination{
+    override val route="signup"
+    // TODO : Add other information for this route e.g any navigation argument needed
+}

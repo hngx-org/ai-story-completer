@@ -27,6 +27,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.newton.storycompleter.AiStoriesViewModel
 import com.newton.storycompleter.R
 import com.newton.storycompleter.app.theme.StoryCompleterTheme
 import com.newton.storycompleter.data.Story
@@ -46,6 +47,9 @@ fun StoriesScreen(
         "The Haunted Mansion",
         "The Mysterious Stranger")*/
     val scrollBehaviour = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val viewModel = AiStoriesViewModel()
+
+    viewModel.generateText()
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehaviour.nestedScrollConnection),

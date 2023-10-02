@@ -13,12 +13,11 @@ class EditStoryViewModel : ViewModel() {
         val words = countWords(currentState.story)
         val buttonEnabled = currentState.wordCount > 14 && currentState.title.isNotEmpty()
 
+        _state.update { currentState }
         _state.update {
             it.copy(
-                title = currentState.title,
-                story = currentState.story,
                 wordCount = words,
-                isBtnEnabled = buttonEnabled
+                isBtnEnabled = buttonEnabled,
             )
         }
     }

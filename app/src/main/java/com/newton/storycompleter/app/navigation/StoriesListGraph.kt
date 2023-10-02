@@ -1,4 +1,4 @@
-package com.newton.storycompleter.ui.navigation
+package com.newton.storycompleter.app.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder

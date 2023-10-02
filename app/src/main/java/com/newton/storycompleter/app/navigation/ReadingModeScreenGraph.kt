@@ -1,4 +1,4 @@
-package com.newton.storycompleter.ui.navigation
+package com.newton.storycompleter.app.navigation
 
 import androidx.compose.foundation.layout.Column
 import androidx.navigation.NavGraphBuilder

@@ -8,8 +8,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.newton.storycompleter.ui.navigation.StoryAppNavHost
-import com.newton.storycompleter.ui.theme.StoryCompleterTheme
+import com.newton.storycompleter.app.navigation.StoryAppNavHost
+import com.newton.storycompleter.app.theme.StoryCompleterTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

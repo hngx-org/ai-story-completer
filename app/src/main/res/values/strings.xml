@@ -12,4 +12,10 @@
     <string name="finish">Finish Story</string>
     <string name="title">Story Title</string>
     <string name="close">Close</string>
+    <string name="creativity_lvl">Creativity Level</string>
+    <string name="generate_candidate">Generate Candidate</string>
+    <string name="generate_words">Words Per Generation</string>
+    <string name="settings">Premium Setting</string>
+    <string name="only_premium">Only available in premium</string>
+    <string name="go_premium">Go Premium</string>
 </resources>

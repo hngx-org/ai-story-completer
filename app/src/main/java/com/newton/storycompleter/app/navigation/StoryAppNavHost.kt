@@ -1,4 +1,4 @@
-package com.newton.storycompleter.ui.navigation
+package com.newton.storycompleter.app.navigation
 
 import android.content.Context
 import androidx.compose.foundation.layout.Column
@@ -81,7 +81,12 @@ fun StoryAppNavHost(
                 isEdit = false,
                 onFinishClick = { },
                 onGenerateClick = { },
-                onClose = onClose
+                onClose = onClose,
+                onDecreaseCandidate = { },
+                onIncreaseCandidate = { },
+                onDecreaseWords = { },
+                onIncreaseWords = { },
+                onPremiumClicked = { }
             )
         }
         composable(route = ReadingModeScreen.route) {

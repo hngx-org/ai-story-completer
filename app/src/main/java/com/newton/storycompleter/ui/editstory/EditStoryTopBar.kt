@@ -2,6 +2,7 @@ package com.newton.storycompleter.ui.editstory
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -19,6 +20,7 @@ fun EditStoryTopBar(
     modifier: Modifier = Modifier,
     titleId: Int,
     onBack: () -> Unit,
+    onSettingsClick: () -> Unit,
 ) {
     CenterAlignedTopAppBar(
         modifier = modifier,
@@ -40,7 +42,20 @@ fun EditStoryTopBar(
                     )
                 },
             )
+        },
+        actions = {
+            IconButton(
+                onClick = onSettingsClick,
+                content = {
+                    Icon(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = stringResource(id = R.string.settings)
+                    )
+                }
+            )
         }
     )
 
 }
+
+

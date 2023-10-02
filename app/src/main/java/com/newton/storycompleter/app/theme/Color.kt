@@ -1,4 +1,4 @@
-package com.newton.storycompleter.ui.theme
+package com.newton.storycompleter.app.theme
 
 import androidx.compose.ui.graphics.Color
 

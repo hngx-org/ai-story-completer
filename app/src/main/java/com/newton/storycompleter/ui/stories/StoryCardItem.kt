@@ -22,7 +22,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.newton.storycompleter.R
-import com.newton.storycompleter.ui.theme.StoryCompleterTheme
+import com.newton.storycompleter.app.theme.StoryCompleterTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

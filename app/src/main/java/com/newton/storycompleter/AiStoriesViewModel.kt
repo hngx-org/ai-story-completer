@@ -22,10 +22,10 @@ class AiStoriesViewModel : ViewModel() {
 
     var prompt1 = "Continue this story in less than 50 token: The boy came from a poor background"
     var prompt2 = "give a title to this story,$generatedText"
-    init  {
+   /* init  {
         Log.d("Api Respose","Test")
         generateText()
-    }
+    }*/
     fun onInputTextChanged(text: String) {
         inputText = text
     }

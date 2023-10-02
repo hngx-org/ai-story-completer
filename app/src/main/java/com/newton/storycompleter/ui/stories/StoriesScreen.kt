@@ -49,7 +49,6 @@ fun StoriesScreen(
     val scrollBehaviour = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val viewModel = AiStoriesViewModel()
 
-    viewModel.generateText()
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehaviour.nestedScrollConnection),

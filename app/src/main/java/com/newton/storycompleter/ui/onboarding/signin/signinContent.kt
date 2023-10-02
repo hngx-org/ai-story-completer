@@ -2,6 +2,7 @@ package com.newton.storycompleter.ui.onboarding.signin
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -70,7 +72,7 @@ fun SignInContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(80.dp))
-
+            Spacer(modifier = Modifier.height(48.dp))
             Text(
                 text = "Welcome Back!",
 // Geometria 24 | Medium
@@ -111,6 +113,22 @@ fun SignInContent(
                     fontSize = 15.sp
                 )
             }
+            Spacer(modifier = Modifier.height(64.dp))
+            Row(horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    painter = painterResource(id = R.drawable.google_logo),
+                    contentDescription = "google logo",
+
+                    )
+                Spacer(modifier = Modifier.width(8.dp))
+                Icon(
+                    painter = painterResource(id = R.drawable.twitter_logo),
+                    contentDescription = "google logo",
+
+                    )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
             Row {
                 Text(
                     modifier = Modifier.clickable {

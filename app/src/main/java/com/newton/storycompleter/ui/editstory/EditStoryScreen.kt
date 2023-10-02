@@ -1,6 +1,7 @@
 package com.newton.storycompleter.ui.editstory
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -23,10 +25,12 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -107,6 +111,9 @@ fun EditStoryScreen(
                                                 style = MaterialTheme.typography.bodySmall
                                             )
                                         },
+                                        colors = TextFieldDefaults.textFieldColors(
+                                            containerColor = Color(0xFFFFFFFF)
+                                        )
                                     )
 
                                     Divider()
@@ -119,7 +126,10 @@ fun EditStoryScreen(
                                     )
                                 }
                             )
-                        }
+                        },
+                        colors = CardDefaults.cardColors(
+                            containerColor = Color(0xFFFFFFFF)
+                        )
                     )
 
                     Spacer(modifier = modifier.height(15.dp))
@@ -131,22 +141,29 @@ fun EditStoryScreen(
                         horizontalArrangement = Arrangement.spacedBy(10.dp),
                         content = {
                             Button(
-                                modifier = modifier.weight(.1f),
-                                onClick = onGenerateClick,
-                                content = {
-                                    Text(
-                                        text = stringResource(id = R.string.generate),
-                                        style = MaterialTheme.typography.bodyMedium
-                                    )
-                                },
-                                enabled = state.isBtnEnabled,
-                                shape = RoundedCornerShape(10.dp),
+                                modifier = modifier
+                                    .weight(.1f)
+                                    .padding(0.dp)
+                                    .width(114.dp)
+                                    .height(40.dp) ,
+                            onClick = { onGenerateClick.invoke() },
+                            content = {
+                                Text(
+                                    text = stringResource(id = R.string.generate),
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            },
+                            enabled = state.isBtnEnabled,
+                            shape = RoundedCornerShape(16.dp),
                             )
 
                             OutlinedButton(
-                                modifier = modifier.weight(.1f),
+                                modifier = modifier
+                                    .height(40.dp)
+                                    .weight(.1f),
+                                shape = RoundedCornerShape(size = 16.dp),
                                 onClick = onFinishClick,
-                                shape = RoundedCornerShape(10.dp),
+
                                 content = {
                                     Text(
                                         text = stringResource(id = R.string.finish),

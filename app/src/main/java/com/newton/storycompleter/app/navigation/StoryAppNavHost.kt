@@ -1,4 +1,4 @@
-package com.newton.storycompleter.app.navigation
+package com.newton.storycompleter.ui.navigation
 
 import android.content.Context
 import androidx.compose.foundation.layout.Column
@@ -9,17 +9,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.newton.storycompleter.ui.editstory.EditStoryScreen
-import com.newton.storycompleter.ui.editstory.EditStoryViewModel
+import com.newton.storycompleter.ui.onboarding.SplashScreen
 import com.newton.storycompleter.ui.stories.StoriesScreen
 
 @Composable
@@ -38,56 +34,27 @@ fun StoryAppNavHost(
 
         composable(route = SplashScreen.route) {
            com.newton.storycompleter.ui.onboarding.SplashScreen(onNext = {
-               navController.navigate(route = StoriesListScreen.route){
-                  // launchSingleTop = true
+               navController.navigate(route = MainScreen.route){
+                   launchSingleTop = true
                    popUpTo(SplashScreen.route){inclusive = true}
                }
 
            })
         }
-        composable(route = StoriesListScreen.route) {
+        composable(route = MainScreen.route) {
+           StoriesScreen(onStoryClick ={
 
-            val createStory = remember {
-                {
-                    navController.navigate(EditStoryScreen.route)
-                }
-            }
+               navController.navigate(route =ReadingModeScreen.route )
 
-            val stories =
-                listOf("Kid Danger", "SpongeBob SquarePants", "Sofia the first living in a castle")
-
-
-            StoriesScreen(
-                stories = stories,
-                onStoryClick = { }, //todo go to detail screen,
-                onCreateStoryClick = createStory
-            )
-
+           } , onCreateStoryClick = {
+               navController.navigate(route =AiStoryScreen.route)
+           })
         }
 
-        composable(route = EditStoryScreen.route) {
-            val viewModel = viewModel<EditStoryViewModel>()
-            val state = viewModel.state.collectAsState().value
+        composable(route = AiStoryScreen.route) {
+            Column (){
 
-            val onClose: () -> Unit = remember {
-                {
-                    navController.navigateUp()
-                }
             }
-
-            EditStoryScreen(
-                state = state,
-                updateState = viewModel::updateState,
-                isEdit = false,
-                onFinishClick = { },
-                onGenerateClick = { },
-                onClose = onClose,
-                onDecreaseCandidate = { },
-                onIncreaseCandidate = { },
-                onDecreaseWords = { },
-                onIncreaseWords = { },
-                onPremiumClicked = { }
-            )
         }
         composable(route = ReadingModeScreen.route) {
             Column (){

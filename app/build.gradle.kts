@@ -72,4 +72,8 @@ dependencies {
     implementation ("androidx.navigation:navigation-compose:2.7.3")
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.3")
 
+    //okhttp3
+    implementation ("com.squareup.okhttp3:okhttp:4.11.0")
+
+
 }

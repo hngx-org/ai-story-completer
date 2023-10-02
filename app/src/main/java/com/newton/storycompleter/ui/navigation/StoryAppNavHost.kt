@@ -16,6 +16,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.newton.storycompleter.ui.onboarding.SplashScreen
+import com.newton.storycompleter.ui.onboarding.signin.SignInFullScreen
+import com.newton.storycompleter.ui.onboarding.signup.SignUpFullScreen
 import com.newton.storycompleter.ui.stories.StoriesScreen
 
 @Composable
@@ -23,48 +25,66 @@ fun StoryAppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController
 
-){
+) {
 
     NavHost(
         modifier = modifier.fillMaxSize(),
         navController = navController,
         startDestination = SplashScreen.route
-    ){
+    ) {
         // TODO : Add your navigation graph as appropriate
 
         composable(route = SplashScreen.route) {
-           com.newton.storycompleter.ui.onboarding.SplashScreen(onNext = {
-               navController.navigate(route = MainScreen.route){
-                   launchSingleTop = true
-                   popUpTo(SplashScreen.route){inclusive = true}
-               }
+            com.newton.storycompleter.ui.onboarding.SplashScreen(onNext = {
+                navController.navigate(route = SignInScreen.route) {
+                    launchSingleTop = true
+                    popUpTo(SplashScreen.route) { inclusive = true }
+                }
 
-           })
+            })
         }
         composable(route = MainScreen.route) {
-           StoriesScreen(onStoryClick ={
+            StoriesScreen(onStoryClick = {
 
-               navController.navigate(route =ReadingModeScreen.route )
+                navController.navigate(route = ReadingModeScreen.route)
 
-           } , onCreateStoryClick = {
-               navController.navigate(route =AiStoryScreen.route)
-           })
+            }, onCreateStoryClick = {
+                navController.navigate(route = AiStoryScreen.route)
+            })
         }
 
         composable(route = AiStoryScreen.route) {
-            Column (){
+            Column() {
 
             }
         }
         composable(route = ReadingModeScreen.route) {
-            Column (){
+            Column() {
 
             }
         }
 
-   /*   mainScreenGraph(navController)
-        aiStoryGraphScreen(navController)
-       readingModeScreenGraph(navController)*/
+        composable(route = SignInScreen.route) {
+            SignInFullScreen(
+                navigateToSignUpScreen = {  navController.navigate(route = SignUpScreen.route)},
+                openAndPopUp = {
+                    navController.navigate(route = MainScreen.route){
+                        launchSingleTop = true
+                        popUpTo(SplashScreen.route) { inclusive = true }
+                    }
+                })
+        }
+        composable(route = SignUpScreen.route) {
+            SignUpFullScreen(openAndPopUp = {
+                navController.navigate(route = SignInScreen.route)
+            }, navigateBack = {
+                navController.navigate(route = SignInScreen.route)
+            })
+        }
+
+        /*   mainScreenGraph(navController)
+             aiStoryGraphScreen(navController)
+            readingModeScreenGraph(navController)*/
 
 
     }
@@ -75,25 +95,25 @@ fun StoryAppNavHost(
 fun AiStoryApp(
     modifier: Modifier = Modifier,
     navController: NavHostController
-){
+) {
 
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        content = { offsetPadding->
+        content = { offsetPadding ->
 
             StoryAppNavHost(
                 modifier = Modifier
                     .padding(offsetPadding)
                     .fillMaxSize(),
-                navController =navController
+                navController = navController
             )
         },
         bottomBar = {
-         Row {
+            Row {
 
-         }
+            }
         },
 
         snackbarHost = {
@@ -102,4 +122,4 @@ fun AiStoryApp(
     )
 }
 
-class MockNavController(ctx: Context): NavHostController(ctx)
+class MockNavController(ctx: Context) : NavHostController(ctx)

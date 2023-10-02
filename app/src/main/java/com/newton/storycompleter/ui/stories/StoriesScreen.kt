@@ -42,7 +42,6 @@ val stories = listOf( "The Lost City",
     val scrollBehaviour = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val viewModel = AiStoriesViewModel()
 
-    viewModel.generateText()
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehaviour.nestedScrollConnection),

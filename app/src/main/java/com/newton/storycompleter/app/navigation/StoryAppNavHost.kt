@@ -20,6 +20,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.newton.storycompleter.ui.editstory.EditStoryScreen
 import com.newton.storycompleter.ui.editstory.EditStoryViewModel
+import com.newton.storycompleter.ui.onboarding.signin.SignInFullScreen
+import com.newton.storycompleter.ui.onboarding.signup.SignUpFullScreen
 import com.newton.storycompleter.ui.stories.StoriesScreen
 
 @Composable
@@ -27,31 +29,31 @@ fun StoryAppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController
 
-){
+) {
 
     NavHost(
         modifier = modifier.fillMaxSize(),
         navController = navController,
         startDestination = SplashScreen.route
-    ){
+    ) {
         // TODO : Add your navigation graph as appropriate
 
         composable(route = SplashScreen.route) {
-           com.newton.storycompleter.ui.onboarding.SplashScreen(onNext = {
-               navController.navigate(route = StoriesListScreen.route){
-                   popUpTo(SplashScreen.route){inclusive = true}
-               }
+            com.newton.storycompleter.ui.onboarding.SplashScreen(onNext = {
+                navController.navigate(route = SignInScreen.route) {
+                    popUpTo(SplashScreen.route) { inclusive = true }
+                }
 
-           })
+            })
         }
         composable(route = StoriesListScreen.route) {
-           StoriesScreen(onStoryClick ={
+            StoriesScreen(onStoryClick = {
 
-               navController.navigate(route =ReadingModeScreen.route )
+                navController.navigate(route = ReadingModeScreen.route)
 
-           } , onCreateStoryClick = {
-               navController.navigate(route =EditStoryScreen.route)
-           })
+            }, onCreateStoryClick = {
+                navController.navigate(route = EditStoryScreen.route)
+            })
         }
 
         composable(route = EditStoryScreen.route) {
@@ -79,14 +81,28 @@ fun StoryAppNavHost(
             )
         }
         composable(route = ReadingModeScreen.route) {
-            Column (){
+            Column() {
 
             }
         }
+        composable(route = SignInScreen.route) {
+            SignInFullScreen(navigateToSignUpScreen = { navController.navigate(route = SignUpScreen.route) }) {
+                navController.navigate(route = StoriesListScreen.route){
+                    popUpTo(SignInScreen.route) { inclusive = true }
+                }
+            }
+        }
+        composable(route = ReadingModeScreen.route) {
+            SignUpFullScreen(openAndPopUp = {
+                navController.navigate(route = SignInScreen.route)
+            }) {
+                navController.navigate(route = SignInScreen.route)
+            }
+        }
 
-   /*   mainScreenGraph(navController)
-        aiStoryGraphScreen(navController)
-       readingModeScreenGraph(navController)*/
+        /*   mainScreenGraph(navController)
+             aiStoryGraphScreen(navController)
+            readingModeScreenGraph(navController)*/
 
 
     }
@@ -97,25 +113,25 @@ fun StoryAppNavHost(
 fun AiStoryApp(
     modifier: Modifier = Modifier,
     navController: NavHostController
-){
+) {
 
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        content = { offsetPadding->
+        content = { offsetPadding ->
 
             StoryAppNavHost(
                 modifier = Modifier
                     .padding(offsetPadding)
                     .fillMaxSize(),
-                navController =navController
+                navController = navController
             )
         },
         bottomBar = {
-         Row {
+            Row {
 
-         }
+            }
         },
 
         snackbarHost = {
@@ -124,4 +140,4 @@ fun AiStoryApp(
     )
 }
 
-class MockNavController(ctx: Context): NavHostController(ctx)
+class MockNavController(ctx: Context) : NavHostController(ctx)

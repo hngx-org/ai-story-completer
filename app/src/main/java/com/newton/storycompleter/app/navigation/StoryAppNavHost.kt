@@ -1,7 +1,6 @@
 package com.newton.storycompleter.app.navigation
 
 import android.content.Context
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -22,6 +21,7 @@ import com.newton.storycompleter.ui.editstory.EditStoryScreen
 import com.newton.storycompleter.ui.editstory.EditStoryViewModel
 import com.newton.storycompleter.ui.onboarding.signin.SignInFullScreen
 import com.newton.storycompleter.ui.onboarding.signup.SignUpFullScreen
+import com.newton.storycompleter.ui.readingmode.ReadModeScreen
 import com.newton.storycompleter.ui.stories.StoriesScreen
 
 @Composable
@@ -81,18 +81,36 @@ fun StoryAppNavHost(
             )
         }
         composable(route = ReadingModeScreen.route) {
-            Column() {
 
+            val onBack: () -> Unit = remember {
+                {
+                    navController.navigateUp()
+                }
             }
+
+            val onEdit: () -> Unit = remember {
+                {
+                    navController.navigate(EditStoryScreen.route)
+                }
+            }
+
+            ReadModeScreen(
+                onBack = onBack,
+                onDelete = { },
+                onEdit = onEdit
+            )
         }
         composable(route = SignInScreen.route) {
-            SignInFullScreen(navigateToSignUpScreen = { navController.navigate(route = SignUpScreen.route) }) {
-                navController.navigate(route = StoriesListScreen.route){
+            SignInFullScreen(
+                navigateToSignUpScreen = {
+                    navController.navigate(route = SignUpScreen.route)
+                }) {
+                navController.navigate(route = StoriesListScreen.route) {
                     popUpTo(SignInScreen.route) { inclusive = true }
                 }
             }
         }
-        composable(route = ReadingModeScreen.route) {
+        composable(route = SignUpScreen.route) {
             SignUpFullScreen(openAndPopUp = {
                 navController.navigate(route = SignInScreen.route)
             }) {

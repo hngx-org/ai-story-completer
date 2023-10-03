@@ -70,9 +70,9 @@ class EditStoryViewModel @Inject constructor(private val storyRepository: StoryR
             override fun onResponse(response: String) {
 
                 _state.update {
-
                     it.copy(
-                        story = state.value.story?.copy(content = state.value.story?.content +response)
+
+                        story = state.value.story?.copy(content = state.value.story!!.content+"\n\n"+response )
                     )
                 }
                 Log.d("Api Response",response)

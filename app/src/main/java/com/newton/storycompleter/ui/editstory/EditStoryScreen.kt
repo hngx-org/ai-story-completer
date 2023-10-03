@@ -36,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.newton.storycompleter.R
 import com.newton.storycompleter.app.theme.StoryCompleterTheme
+import com.newton.storycompleter.data.Story
 import com.newton.storycompleter.ui.editstory.bottomSheet.SettingBottomSheet
 import kotlinx.coroutines.launch
 
@@ -47,7 +48,7 @@ fun EditStoryScreen(
     updateState: (EditStoryState) -> Unit,
     isEdit: Boolean,
     onFinishClick: () -> Unit,
-    onGenerateClick: () -> Unit,
+    onGenerateClick: (String) -> Unit,
     onClose: () -> Unit,
     onDecreaseCandidate: () -> Unit,
     onIncreaseCandidate: () -> Unit,
@@ -78,8 +79,15 @@ fun EditStoryScreen(
                 content = {
                     OutlinedTextField(
                         modifier = modifier.fillMaxWidth(),
-                        value = state.title,
-                        onValueChange = { updateState(state.copy(title = it)) },
+                        value = state.story?.title?:"",
+                        onValueChange = {
+                            val story = if (state.story == null)
+                                Story(content = "", title = it)
+                            else
+                                state.story.copy(title = it)
+
+                            updateState(state.copy(story = story))
+                                        },
                         label = { Text(text = stringResource(id = R.string.title)) },
                         textStyle = MaterialTheme.typography.bodyMedium,
                         maxLines = 1,
@@ -102,8 +110,15 @@ fun EditStoryScreen(
                                         modifier = modifier
                                             .fillMaxWidth()
                                             .height(300.dp),
-                                        value = state.story,
-                                        onValueChange = { updateState(state.copy(story = it)) },
+                                        value = state.story?.content?:"",
+                                        onValueChange = {
+                                            val newStory = if (state.story == null)
+                                                Story(content = it, title = "")
+                                            else
+                                                state.story.copy(content = it)
+
+                                            updateState(state.copy(story = newStory))
+                                                        },
                                         textStyle = MaterialTheme.typography.bodySmall,
                                         label = {
                                             Text(
@@ -146,7 +161,7 @@ fun EditStoryScreen(
                                     .padding(0.dp)
                                     .width(114.dp)
                                     .height(40.dp) ,
-                            onClick = { onGenerateClick.invoke() },
+                            onClick =  {onGenerateClick.invoke(state.story)} ,
                             content = {
                                 Text(
                                     text = stringResource(id = R.string.generate),

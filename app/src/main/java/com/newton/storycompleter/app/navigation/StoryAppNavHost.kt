@@ -61,6 +61,7 @@ fun StoryAppNavHost(
         composable(route = EditStoryScreen.route) {
             val promptViewModel:PromptViewModel = hiltViewModel()
             val state = promptViewModel.state.collectAsState().value
+            val state2 = promptViewModel.state.collectAsState().value
 
 
             PromptScreen(

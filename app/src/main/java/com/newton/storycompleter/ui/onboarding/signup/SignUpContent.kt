@@ -120,8 +120,9 @@ fun SignUpContent(
                 .width(236.dp)
                 .height(45.dp),
                 onClick = {
-
                     keyboard?.hide()
+                    viewModel.showLoading()
+                    viewModel.onSignUpClick(openAndPopUp = onSignUp)
 
                 }
             ) {

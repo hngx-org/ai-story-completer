@@ -37,7 +37,7 @@ fun SignUpFullScreen(
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         content = { innerPadding ->
-            if (isLoading == true) {
+           if (isLoading == true) {
                FullScreenLoaderComponent()
             } else {
                 SignUpContent(
@@ -48,7 +48,7 @@ fun SignUpFullScreen(
                     viewModel = viewModel
                 )
             }
-        }
+}
     )
 
     LaunchedEffect(viewModel.message) {

@@ -1,6 +1,7 @@
 package com.newton.storycompleter.ui.onboarding.signup
 
 import android.app.Application
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -26,7 +27,7 @@ class SignUpScreenViewModel(
 
     private var _loadingState = MutableLiveData(false)
     val loading: LiveData<Boolean> = _loadingState
-    val authService = AuthService(application.applicationContext)
+    private val authService = AuthService(application.applicationContext)
 
     data class SignUpUiState(
         val username: String = "",
@@ -72,13 +73,16 @@ class SignUpScreenViewModel(
         _loadingState.value = true
         viewModelScope.launch {
 
-            val response = authService.SignUp(username, email, password)
-            when (response) {
+            when (val response = authService.SignUp(username, email, password)) {
                 is Response.Success -> {
+                    Log.d("SignUP",response.toString())
+                    _loadingState.value = false
                     openAndPopUp(SignInScreen.route, SignUpScreen.route)
                 }
 
                 is Response.Failure -> {
+                    _loadingState.value = false
+                    Log.d("SignUP",response.e)
                     postMessage(response.e)
                 }
             }

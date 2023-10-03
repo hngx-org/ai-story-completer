@@ -22,19 +22,20 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.newton.storycompleter.R
+import com.newton.storycompleter.app.data.local.Story
 import com.newton.storycompleter.app.theme.StoryCompleterTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StoryItem(
     modifier: Modifier = Modifier,
-    storyTitle: String,
-    onItemClick: (String) -> Unit //todo pass state class here
+    story: Story,
+    onItemClick: (Story) -> Unit
 ) {
 
     val onItemClicked = remember {
         {
-            onItemClick(storyTitle)
+            onItemClick(story)
         }
     }
 
@@ -57,7 +58,7 @@ fun StoryItem(
                     )
 
                     Text(
-                        text = storyTitle,
+                        text = story.title,
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,
@@ -74,7 +75,7 @@ fun StoryItem(
 @Composable
 private fun PreviewStoryItem() {
     StoryCompleterTheme {
-        StoryItem(storyTitle = "Greedy Goat Matata", onItemClick = { })
+        StoryItem(story = Story(title = "Greedy Goat Matata", content = ""), onItemClick = { })
     }
 
 }

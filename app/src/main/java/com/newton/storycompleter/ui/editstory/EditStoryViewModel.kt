@@ -1,17 +1,15 @@
 package com.newton.storycompleter.ui.editstory
 
 import android.util.Log
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavHostController
-import com.newton.storycompleter.Repository.StoryRepository
-import com.newton.storycompleter.data.Story
-import com.newton.storycompleter.ui.api.AiCallback
-import com.newton.storycompleter.ui.api.AiRepository
+import com.newton.storycompleter.app.data.local.Story
+import com.newton.storycompleter.app.data.remote.api.AiCallback
+import com.newton.storycompleter.app.data.remote.api.AiRepository
+import com.newton.storycompleter.repository.StoryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,6 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EditStoryViewModel @Inject constructor(private val storyRepository: StoryRepository) : ViewModel() {
+
+    private val _story = MutableStateFlow(Story(title = "", content = ""))
     private val _state = MutableStateFlow(EditStoryState())
     val state = _state.asStateFlow()
 
@@ -79,17 +79,26 @@ class EditStoryViewModel @Inject constructor(private val storyRepository: StoryR
             }
 
             override fun onFailure(e: Exception) {
-                Log.e("Api Respose","error occur",e)
+                Log.e("Api Response","error occur",e)
             }
         })
     }
 
 
-    fun saveGeneratedStory(navController: NavHostController, story: Story){
+    fun saveGeneratedStory() {
         viewModelScope.launch {
-            // val story = Story(title = state.value.storyTitle , content = state.value.storyContent)
-            storyRepository.saveStory(story)
-            navController.navigateUp()
+            storyRepository.saveStory(_story.value)
+        }
+    }
+
+    fun getStory(storyId: Int?) {
+        viewModelScope.launch {
+            _story.update {
+                when (storyId) {
+                    null -> Story(title = "", content = "")
+                    else -> storyRepository.getStory(storyId) ?: Story(title = "", content = "")
+                }
+            }
         }
     }
 }

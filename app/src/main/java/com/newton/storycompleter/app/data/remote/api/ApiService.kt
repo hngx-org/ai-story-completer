@@ -1,4 +1,4 @@
-package com.newton.storycompleter.ui.api
+package com.newton.storycompleter.app.data.remote.api
 
 import android.util.Log
 import okhttp3.Call

@@ -18,18 +18,16 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.newton.storycompleter.app.data.local.Story
 import com.newton.storycompleter.app.theme.BaskerVille
 import com.newton.storycompleter.app.theme.Georgian
 import com.newton.storycompleter.app.theme.StoryCompleterTheme
 
-private const val Story =
-    "Paragraphs are medium-sized units of writing, longer than sentences, but shorter than sections, chapters, or entire works. Because they connect the ‘small’ ideas of individual sentences to a ‘bigger’ idea, paragraph structure is essential to any writing for organization, flow, and comprehension."
 
 @Composable
 fun ReadModeScreen(
     modifier: Modifier = Modifier,
-    storyTitle: String = "The Story of the Little Pig in the circle of circumstances",
-    storyBody: String = Story, //Todo StoryEntity
+    story: Story,
     onBack: () -> Unit,
     onDelete: () -> Unit,
     onEdit: () -> Unit,
@@ -44,7 +42,7 @@ fun ReadModeScreen(
                 fontWeight = FontWeight.Medium
             )
         ) {
-            append("“${storyBody[0].titlecaseChar()}")
+            append("“${story.title[0].titlecaseChar()}")
         }
         withStyle(
             style = SpanStyle(
@@ -53,14 +51,14 @@ fun ReadModeScreen(
                 letterSpacing = 0.2.sp,
             )
         ) {
-            append(storyBody.substring(1,storyBody.length-1))
+            append(story.content.substring(1,story.content.length-1))
         }
     }
 
     Scaffold(
         topBar = {
             ReadingModeTopBar(
-                storyTitle = storyTitle, //Todo get story title from the entity
+                storyTitle = story.title,
                 onBack = onBack,
                 onDelete = onDelete,
                 onEdit = onEdit
@@ -76,9 +74,7 @@ fun ReadModeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 content = {
 
-                    Text(
-                        text = annotatedString
-                    ) //Todo get the storybody from the entity
+                    Text(text = annotatedString)
 
                 }
             )
@@ -96,7 +92,8 @@ private fun PreviewReadingMode() {
         ReadModeScreen(
             onEdit = { },
             onBack = { },
-            onDelete = { }
+            onDelete = { },
+            story = Story(title = "This is my story", content = "This is my song")
         )
     }
 }

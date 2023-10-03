@@ -75,5 +75,7 @@ dependencies {
     //okhttp3
     implementation ("com.squareup.okhttp3:okhttp:4.11.0")
 
+    //Authentication
+    implementation ("com.github.hngx-org:mirage-kotlin-auth-library:2.0.0")
 
 }

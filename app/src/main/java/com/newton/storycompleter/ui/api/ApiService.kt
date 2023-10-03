@@ -1,6 +1,8 @@
 package com.newton.storycompleter.ui.api
 
+import android.content.Context
 import android.util.Log
+import com.shegs.hng_auth_library.authlibrary.AuthLibrary
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -65,3 +67,4 @@ class AiRepository {
 
     }
 }
+

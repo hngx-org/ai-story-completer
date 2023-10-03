@@ -54,8 +54,8 @@ class EditStoryViewModel : ViewModel() {
         inputText = text
     }
 
-    fun generateText() {
-        val prompt1 = "Continue this story in less than 50 token: ${_state.value.story}"
+    fun generateText(prompt:String) {
+        val prompt1 = "Continue this story in less than 50 token:$prompt"
         Log.d("Prompt", prompt1)
         repository.generateText(prompt1, object : AiCallback {
 
@@ -63,7 +63,7 @@ class EditStoryViewModel : ViewModel() {
 
                 _state.update {
                     it.copy(
-                        story = state.value.story+"\n\n"+response
+                        story = state.value.story+response
                     )
                 }
                 Log.d("Api Response",response)

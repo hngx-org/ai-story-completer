@@ -48,7 +48,7 @@ fun EditStoryScreen(
     updateState: (EditStoryState) -> Unit,
     isEdit: Boolean,
     onFinishClick: () -> Unit,
-    onGenerateClick: () -> Unit,
+    onGenerateClick: (String) -> Unit,
     onClose: () -> Unit,
     onDecreaseCandidate: () -> Unit,
     onIncreaseCandidate: () -> Unit,
@@ -161,7 +161,7 @@ fun EditStoryScreen(
                                     .padding(0.dp)
                                     .width(114.dp)
                                     .height(40.dp) ,
-                            onClick = { onGenerateClick.invoke() },
+                            onClick =  {onGenerateClick.invoke(state.story)} ,
                             content = {
                                 Text(
                                     text = stringResource(id = R.string.generate),

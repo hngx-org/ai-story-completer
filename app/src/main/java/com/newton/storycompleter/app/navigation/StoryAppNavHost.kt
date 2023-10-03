@@ -13,6 +13,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -23,6 +24,7 @@ import com.newton.storycompleter.ui.editstory.EditStoryViewModel
 import com.newton.storycompleter.ui.onboarding.signin.SignInFullScreen
 import com.newton.storycompleter.ui.onboarding.signup.SignUpFullScreen
 import com.newton.storycompleter.ui.stories.StoriesScreen
+import com.newton.storycompleter.ui.stories.StoriesViewModel
 
 @Composable
 fun StoryAppNavHost(
@@ -47,17 +49,22 @@ fun StoryAppNavHost(
             })
         }
         composable(route = StoriesListScreen.route) {
+            val storiesViewModel:StoriesViewModel = hiltViewModel()
+            val storyListState by storiesViewModel.state.collectAsState()
             StoriesScreen(onStoryClick = {
 
                 navController.navigate(route = ReadingModeScreen.route)
 
             }, onCreateStoryClick = {
                 navController.navigate(route = EditStoryScreen.route)
-            })
+            },
+                state =storyListState
+            )
         }
 
         composable(route = EditStoryScreen.route) {
-            val viewModel = viewModel<EditStoryViewModel>()
+
+            val viewModel:EditStoryViewModel = hiltViewModel()
             val state = viewModel.state.collectAsState().value
 
             val onClose: () -> Unit = remember {
@@ -70,7 +77,7 @@ fun StoryAppNavHost(
                 state = state,
                 updateState = viewModel::updateState,
                 isEdit = false,
-                onFinishClick = { },
+                onFinishClick = { viewModel.saveGeneratedStory(navController,state.story!!)},
                 onGenerateClick = viewModel::generateText,
                 onClose = onClose,
                 onDecreaseCandidate = { },
@@ -92,7 +99,7 @@ fun StoryAppNavHost(
                 }
             }
         }
-        composable(route = ReadingModeScreen.route) {
+        composable(route = SignUpScreen.route) {
             SignUpFullScreen(openAndPopUp = {
                 navController.navigate(route = SignInScreen.route)
             }) {

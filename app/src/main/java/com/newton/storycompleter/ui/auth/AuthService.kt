@@ -13,7 +13,7 @@ class AuthService(context: Context) {
     private val apiService = AuthLibrary.createAuthService()
     private val dataStoreRepository = AuthLibrary.createDataStoreRepository(context)
 
-    suspend fun SignUp(name: String, email: String, password: String): ApiResponse<AuthResponse>  {
+    suspend fun SignUp(name: String, email: String, password: String): Response<AuthResponse>  {
 
         val signupRepository = AuthLibrary.createSignupRepository(apiService)
 
@@ -23,11 +23,14 @@ class AuthService(context: Context) {
             password = password,
             confirm_password = password
         )
-        val result: ApiResponse<AuthResponse> = signupRepository.signup(signupRequest)
-        return result
+        return when (val result: ApiResponse<AuthResponse> = signupRepository.signup(signupRequest)) {
+         is ApiResponse.Success -> Response.Success(result.data)
+         is ApiResponse.Error -> Response.Failure(result.message)
+        }
+
     }
 
-    suspend fun SignIn(email: String, password: String): ApiResponse<AuthResponse> {
+    suspend fun SignIn(email: String, password: String): Response<AuthResponse> {
         val loginRepository = AuthLibrary.createLoginRepository(apiService, dataStoreRepository)
 
         val loginRequest = LoginRequest(
@@ -35,20 +38,31 @@ class AuthService(context: Context) {
             password = password
         )
         val result: ApiResponse<AuthResponse> = loginRepository.login(loginRequest)
-       return result
+       return when(result){
+           is ApiResponse.Success -> Response.Success(result.data)
+           is ApiResponse.Error -> Response.Failure(result.message)
+       }
     }
 
-    suspend fun Logout(): ApiResponse<LogoutResponse> {
+    suspend fun Logout(): Response<LogoutResponse> {
         val logoutRepository = AuthLibrary.createLogoutRepository(apiService)
         val result: ApiResponse<LogoutResponse> = logoutRepository.logout()
-       return result
+        return when(result){
+            is ApiResponse.Success -> Response.Success(result.data)
+            is ApiResponse.Error -> Response.Failure(result.message)
+        }
+
     }
 
-    suspend fun UserProfile(): ApiResponse<AuthResponse> {
+    suspend fun UserProfile(): Response<AuthResponse> {
         val profileRepository = AuthLibrary.createProfileRepository(apiService)
         val result: ApiResponse<AuthResponse> = profileRepository.profile()
 
-        return result
+        return when(result){
+            is ApiResponse.Success -> Response.Success(result.data)
+            is ApiResponse.Error -> Response.Failure(result.message)
+        }
     }
 }
+
 

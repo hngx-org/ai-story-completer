@@ -1,19 +1,22 @@
 package com.newton.storycompleter.ui.onboarding.signin
 
 import android.app.Application
-import android.content.Context
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.newton.storycompleter.R
+import com.newton.storycompleter.app.navigation.SignInScreen
+import com.newton.storycompleter.app.navigation.StoriesListScreen
 import com.newton.storycompleter.ui.auth.AuthService
 import com.newton.storycompleter.ui.auth.Profile
+import com.newton.storycompleter.ui.auth.Response
 import com.newton.storycompleter.ui.onboarding.signin.components.isValidEmail
-import com.shegs.hng_auth_library.network.ApiResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -27,6 +30,11 @@ class SignInScreenViewModel(
 
     private var _loadingState = MutableLiveData(false)
     val loading: LiveData<Boolean> = _loadingState
+
+
+    private var _iserror = MutableLiveData(false)
+    val iserror: LiveData<Boolean> = _iserror
+
     val authService = AuthService(application.applicationContext)
 
     private val _message = MutableStateFlow("")
@@ -46,11 +54,21 @@ class SignInScreenViewModel(
         _loadingState.value = true
 
         viewModelScope.launch {
-
+            val response =authService.SignIn(email, password)
+            when (response) {
+                is Response.Success -> {
+                   openAndPopUp(StoriesListScreen.route,SignInScreen.route)
+                }
+                is Response.Failure -> {
+                    _iserror.value =true
+                  postMessage( response.e)
+                }
+            }
         }
         _loadingState.value = false
 
     }
+
     fun hideLoading() {
         _loadingState.value = false
     }
@@ -93,4 +111,17 @@ class SignInScreenViewModel(
 
     }
 
+
+}
+
+class SignInScreenViewModelFactory(
+    private val application: Application
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        @Suppress("UNCHECKED_CAST")
+        if (modelClass.isAssignableFrom(SignInScreenViewModel::class.java)) {
+            return SignInScreenViewModel(application) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
 }

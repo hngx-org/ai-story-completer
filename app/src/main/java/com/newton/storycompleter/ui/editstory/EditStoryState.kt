@@ -1,8 +1,9 @@
 package com.newton.storycompleter.ui.editstory
 
+import com.newton.storycompleter.data.Story
+
 data class EditStoryState(
-    val title: String = "",
-    val story: String = "",
+    val story: Story? = null,
     val wordCount: Int = 0,
     val isBtnEnabled: Boolean = false,
     val isPremiumVersion: Boolean = false,

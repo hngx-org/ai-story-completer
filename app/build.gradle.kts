@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -74,6 +76,17 @@ dependencies {
 
     //okhttp3
     implementation ("com.squareup.okhttp3:okhttp:4.11.0")
+
+    //Room Database
+    val  roomVersion = "2.6.0-rc01"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    kapt ("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+
+    // Hilt
+    implementation("com.google.dagger:hilt-android:2.48")
+    kapt ("com.google.dagger:hilt-android-compiler:2.48")
+    implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     //Authentication
     implementation ("com.github.hngx-org:mirage-kotlin-auth-library:2.0.0")

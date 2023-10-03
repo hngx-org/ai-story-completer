@@ -6,19 +6,27 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
+import com.newton.storycompleter.Repository.StoryRepository
+import com.newton.storycompleter.data.Story
 import com.newton.storycompleter.ui.api.AiCallback
 import com.newton.storycompleter.ui.api.AiRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class EditStoryViewModel : ViewModel() {
+@HiltViewModel
+class EditStoryViewModel @Inject constructor(private val storyRepository: StoryRepository) : ViewModel() {
     private val _state = MutableStateFlow(EditStoryState())
     val state = _state.asStateFlow()
 
     fun updateState(currentState: EditStoryState) {
-        val words = countWords(currentState.story)
-        val buttonEnabled = currentState.wordCount > 14 && currentState.title.isNotEmpty()
+        val words = countWords(currentState.story?.content!!)
+        val buttonEnabled = currentState.wordCount > 14 && currentState.story.title.isNotEmpty()
 
         _state.update { currentState }
         _state.update {
@@ -73,5 +81,14 @@ class EditStoryViewModel : ViewModel() {
                 Log.e("Api Respose","error occur",e)
             }
         })
+    }
+
+
+    fun saveGeneratedStory(navController: NavHostController, story: Story){
+        viewModelScope.launch {
+            // val story = Story(title = state.value.storyTitle , content = state.value.storyContent)
+            storyRepository.saveStory(story)
+            navController.navigateUp()
+        }
     }
 }

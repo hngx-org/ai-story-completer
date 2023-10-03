@@ -92,7 +92,7 @@ fun StoryAppNavHost(
                 }
             }
         }
-        composable(route = ReadingModeScreen.route) {
+        composable(route = SignUpScreen.route) {
             SignUpFullScreen(openAndPopUp = {
                 navController.navigate(route = SignInScreen.route)
             }) {

@@ -17,8 +17,9 @@ interface AiCallback {
     fun onResponse(response: String)
     fun onFailure(e: Exception)
 }
+
 class AiRepository {
-    fun generateText(prompt: String,callback: AiCallback) {
+    fun generateText(prompt: String, callback: AiCallback) {
         val client = OkHttpClient()
 
         val body =
@@ -27,16 +28,17 @@ class AiRepository {
                 "model": "gpt-3.5-turbo-instruct",
                 "prompt": "$prompt",
                 "temperature": 0.5,
-                "max_tokens": 50,
-                "n": 1,
-                "stop": "\n"
+                "max_tokens": 50
             }
             """.trimIndent()
 
         val request = Request.Builder()
             .url("https://api.openai.com/v1/completions")
-            .addHeader("Content-Type","application/json")
-            .addHeader("Authorization", "Bearer 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")
+            .addHeader("Content-Type", "application/json")
+            .addHeader(
+                "Authorization",
+                "Bearer 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"
+            )
             .post(body.toRequestBody("application/json".toMediaTypeOrNull()))
             .build()
         client.newCall(request).enqueue(object : Callback {
@@ -47,16 +49,19 @@ class AiRepository {
             override fun onResponse(call: Call, response: Response) {
                 val responseText = response.body?.string() ?: ""
                 val jsonObject = JSONObject(responseText)
-                val jsonArray:JSONArray = jsonObject.getJSONArray("choices")
+                Log.d("ResponseCheck", responseText)
+                val jsonArray: JSONArray = jsonObject.getJSONArray("choices")
+
                 val textResult = jsonArray.getJSONObject(0).getString("text")
                 callback.onResponse(textResult)
+
             }
         })
 
 
-       /* val response = client.newCall(request).execute()
-        Log.d("API Call", "${response.body?.string()}")
-        return response.body?.string() ?: ""*/
+        /* val response = client.newCall(request).execute()
+         Log.d("API Call", "${response.body?.string()}")
+         return response.body?.string() ?: ""*/
 
     }
 }

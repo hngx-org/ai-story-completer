@@ -29,18 +29,14 @@ import com.newton.storycompleter.app.theme.StoryCompleterTheme
 fun StoryItem(
     modifier: Modifier = Modifier,
     storyTitle: String,
-    onItemClick: (String) -> Unit //todo pass state class here
+    onItemClick: () -> Unit //todo pass state class here
 ) {
 
-    val onItemClicked = remember {
-        {
-            onItemClick(storyTitle)
-        }
-    }
+
 
     ElevatedCard(
         modifier = modifier.fillMaxWidth(),
-        onClick = onItemClicked,
+        onClick = onItemClick,
         shape = RoundedCornerShape(8.dp),
         content = {
             Row(
@@ -74,7 +70,10 @@ fun StoryItem(
 @Composable
 private fun PreviewStoryItem() {
     StoryCompleterTheme {
-        StoryItem(storyTitle = "Greedy Goat Matata", onItemClick = { })
+        StoryItem(
+            storyTitle = "Greedy Goat Matata",
+            onItemClick = {},
+        )
     }
 
 }

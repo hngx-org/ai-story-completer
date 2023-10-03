@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.newton.storycompleter.R
 import com.newton.storycompleter.ui.editstory.CreativeIndex
-import com.newton.storycompleter.ui.editstory.EditStoryState
+import com.newton.storycompleter.ui.editstory.PromptScreenState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,10 +42,10 @@ fun SettingBottomSheet(
     modifier: Modifier = Modifier,
     onDecreaseCandidate: () -> Unit,
     onIncreaseCandidate: () -> Unit,
-    state: EditStoryState,
+    state: PromptScreenState,
     onDecreaseWords: () -> Unit,
     onIncreaseWords: () -> Unit,
-    updateSelection: (EditStoryState) -> Unit,
+    updateSelection: (PromptScreenState) -> Unit,
     onDismissSheet: () -> Unit,
     sheetState: SheetState,
     onPremiumClicked: () -> Unit,
@@ -128,8 +128,8 @@ fun SettingBottomSheet(
 @Composable
 private fun CreativityDropDownMenu(
     modifier: Modifier = Modifier,
-    state: EditStoryState,
-    updateSelection: (EditStoryState) -> Unit,
+    state: PromptScreenState,
+    updateSelection: (PromptScreenState) -> Unit,
 ) {
 
     val options =

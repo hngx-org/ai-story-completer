@@ -16,7 +16,7 @@ import com.newton.storycompleter.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditStoryTopBar(
+fun PromptScreenTopBar(
     modifier: Modifier = Modifier,
     titleId: Int,
     onBack: () -> Unit,

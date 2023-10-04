@@ -90,3 +90,7 @@ dependencies {
 
 
 }
+
+kapt {
+    correctErrorTypes = true
+}

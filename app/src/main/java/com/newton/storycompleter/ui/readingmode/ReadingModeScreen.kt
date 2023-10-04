@@ -42,7 +42,7 @@ fun ReadModeScreen(
                 fontWeight = FontWeight.Medium
             )
         ) {
-            append("“${story.title[0].titlecaseChar()}")
+            append("“${story.content[0].titlecaseChar()}")
         }
         withStyle(
             style = SpanStyle(

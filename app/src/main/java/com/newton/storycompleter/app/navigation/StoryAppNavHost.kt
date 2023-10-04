@@ -57,17 +57,26 @@ fun StoryAppNavHost(
 
             val onStoryClicked = remember {
                 { story: Story ->
-                    navController.navigate("${ReadingModeScreen.route}/${story.id}")
+                    navController.navigate(
+                        ReadingModeScreen.routeWithArg.replace(
+                            "{${ReadingModeScreen.idArg}}",
+                            story.id.toString()
+                        )
+
+                    )
                     {
                         launchSingleTop = true
                     }
                 }
+
             }
 
             StoriesScreen(
                 onStoryClick = onStoryClicked,
                 onCreateStoryClick = {
-                    navController.navigate(route = EditStoryScreen.routeWithArg)
+                    val routeWithArg =
+                        EditStoryScreen.routeWithArg.replace("{${EditStoryScreen.idArg}}", "-1")
+                    navController.navigate(route = routeWithArg)
                 },
                 state = storyListState
             )
@@ -76,16 +85,19 @@ fun StoryAppNavHost(
         composable(
             route = EditStoryScreen.routeWithArg,
             arguments = listOf(
-                navArgument(EditStoryScreen.idArg.toString())
-                { type = NavType.IntType}
+                navArgument(EditStoryScreen.idArg)
+                {
+                    type = NavType.IntType
+                }
             )) { backStackEntry ->
 
             val viewModel: EditStoryViewModel = hiltViewModel()
             val state = viewModel.state.collectAsState().value
 
+            val storyId = backStackEntry.arguments?.getInt(EditStoryScreen.idArg)
+
             LaunchedEffect(key1 = Unit, block = {
-                backStackEntry.arguments?.getInt(EditStoryScreen.idArg.toString())
-                    ?.let { viewModel.getStory(it) }
+               viewModel.getStory(storyId!!)
             })
 
             val onClose: () -> Unit = remember {
@@ -104,7 +116,7 @@ fun StoryAppNavHost(
             EditStoryScreen(
                 state = state,
                 updateState = viewModel::updateState,
-                isEdit = false,
+                isEdit = storyId != -1,
                 onFinishClick = onFinish,
                 onGenerateClick = viewModel::generateText,
                 onClose = onClose,
@@ -118,16 +130,20 @@ fun StoryAppNavHost(
         composable(
             route = ReadingModeScreen.routeWithArg,
             arguments = listOf(
-                navArgument(ReadingModeScreen.idArg.toString())
-                { type = NavType.IntType }
+                navArgument(ReadingModeScreen.idArg)
+                {
+                    type = NavType.IntType
+                }
             )
         ) { backStackEntry ->
 
             val viewModel: ReadingModeViewModel = hiltViewModel()
+            val storyId = backStackEntry.arguments?.getInt(ReadingModeScreen.idArg)
 
             LaunchedEffect(key1 = Unit, block = {
-                backStackEntry.arguments?.getInt(ReadingModeScreen.idArg.toString())
-                    ?.let { viewModel.getStory(it) }
+                if (storyId != null) {
+                    viewModel.getStory(storyId)
+                }
             })
 
 
@@ -136,17 +152,28 @@ fun StoryAppNavHost(
                     navController.navigateUp()
                 }
             }
+            val story = viewModel.story.collectAsState().value
 
             val onEdit: () -> Unit = remember {
                 {
-                    navController.navigate(EditStoryScreen.route)
+                    navController.navigate(
+                       EditStoryScreen.routeWithArg.replace(
+                            "{${EditStoryScreen.idArg}}",
+                            storyId.toString()
+                        )
+                    )
                 }
             }
-            val story = viewModel.story.collectAsState().value
 
+            val onDelete: () -> Unit = remember {
+                {
+                   viewModel.deleteStory(story)
+                    onBack()
+                }
+            }
             ReadModeScreen(
                 onBack = onBack,
-                onDelete = { },
+                onDelete = onDelete,
                 onEdit = onEdit,
                 story = story
             )

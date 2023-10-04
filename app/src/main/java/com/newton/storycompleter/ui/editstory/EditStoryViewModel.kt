@@ -28,7 +28,9 @@ class EditStoryViewModel @Inject constructor(private val storyRepository: StoryR
         val words = countWords(currentState.story?.content!!)
         val buttonEnabled = currentState.wordCount > 14 && currentState.story.title.isNotEmpty()
 
+        _state.update { it.copy(story = _story.value) }
         _state.update { currentState }
+        _story.update { it.copy(title = currentState.story.title, content = currentState.story.content) }
         _state.update {
             it.copy(
                 wordCount = words,
@@ -36,6 +38,7 @@ class EditStoryViewModel @Inject constructor(private val storyRepository: StoryR
             )
         }
     }
+
 
     private fun countWords(text: String): Int {
         val words = text.split(Regex("\\s+"))
@@ -91,14 +94,16 @@ class EditStoryViewModel @Inject constructor(private val storyRepository: StoryR
         }
     }
 
-    fun getStory(storyId: Int?) {
+    fun getStory(storyId: Int) {
         viewModelScope.launch {
-            _story.update {
-                when (storyId) {
-                    null -> Story(title = "", content = "")
-                    else -> storyRepository.getStory(storyId) ?: Story(title = "", content = "")
-                }
+            val story = if (storyId == -1) {
+                Story(title = "", content = "")
+            } else {
+                storyRepository.getStory(storyId) ?: Story(title = "", content = "")
             }
+            _story.update { story }
+            _state.update { it.copy(story = story) }
         }
     }
+
 }

@@ -17,6 +17,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.newton.storycompleter.ui.onboarding.signin.SignInScreenViewModel
 import com.newton.storycompleter.ui.onboarding.signin.SignInScreenViewModelFactory
 import com.newton.storycompleter.ui.onboarding.signin.components.FullScreenLoaderComponent
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
@@ -53,7 +54,7 @@ fun SignUpFullScreen(
 
     LaunchedEffect(viewModel.message) {
         if (viewModel.message.value.isNotEmpty()) {
-            snackbarHostState.showSnackbar(viewModel.message.value)
+            scope.launch   { snackbarHostState.showSnackbar(viewModel.message.value) }
             viewModel.postMessage("")
         }
     }

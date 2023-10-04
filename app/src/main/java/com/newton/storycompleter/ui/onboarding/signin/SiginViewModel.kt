@@ -57,6 +57,7 @@ class SignInScreenViewModel(
             val response =authService.SignIn(email, password)
             when (response) {
                 is Response.Success -> {
+                    postMessage(response.data.message + response.data.data.email)
                    openAndPopUp(StoriesListScreen.route,SignInScreen.route)
                 }
                 is Response.Failure -> {

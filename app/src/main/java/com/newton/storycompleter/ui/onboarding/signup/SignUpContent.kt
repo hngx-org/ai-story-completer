@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -49,7 +50,7 @@ import com.newton.storycompleter.ui.onboarding.signin.components.UsernameField
 fun SignUpContent(
     padding: PaddingValues,
     navigateToSignInScreen: () -> Unit,
-    onSignUp: () -> Unit,
+    onSignUp: (String,String) -> Unit,
     snackBar: () -> Unit,
     viewModel: SignUpScreenViewModel
 ) {
@@ -120,8 +121,9 @@ fun SignUpContent(
                 .width(236.dp)
                 .height(45.dp),
                 onClick = {
-
                     keyboard?.hide()
+                   // viewModel.showLoading()
+                    viewModel.onSignUpClick(openAndPopUp = onSignUp)
 
                 }
             ) {

@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = namespace
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -87,6 +87,12 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.48")
     kapt ("com.google.dagger:hilt-android-compiler:2.48")
     implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+    //Authentication
+    implementation ("com.github.hngx-org:mirage-kotlin-auth-library:2.0.0")
+
+    //Livedata compose
+    implementation ("androidx.compose.runtime:runtime-livedata:1.5.1")
 
 
 }

@@ -1,7 +1,6 @@
 package com.newton.storycompleter.ui.onboarding.signup
 
 import android.app.Application
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -12,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.newton.storycompleter.R
 import com.newton.storycompleter.app.navigation.SignInScreen
 import com.newton.storycompleter.app.navigation.SignUpScreen
+import com.newton.storycompleter.app.navigation.StoriesListScreen
 import com.newton.storycompleter.ui.auth.AuthService
 import com.newton.storycompleter.ui.auth.Response
 import com.newton.storycompleter.ui.onboarding.signin.components.isValidEmail
@@ -27,7 +27,7 @@ class SignUpScreenViewModel(
 
     private var _loadingState = MutableLiveData(false)
     val loading: LiveData<Boolean> = _loadingState
-    private val authService = AuthService(application.applicationContext)
+    val authService = AuthService(application.applicationContext)
 
     data class SignUpUiState(
         val username: String = "",
@@ -73,17 +73,15 @@ class SignUpScreenViewModel(
         _loadingState.value = true
         viewModelScope.launch {
 
-            when (val response = authService.SignUp(username, email, password)) {
+            val response = authService.SignUp(username, email, password)
+            when (response) {
                 is Response.Success -> {
-                    Log.d("SignUP",response.toString())
-                    _loadingState.value = false
                     openAndPopUp(SignInScreen.route, SignUpScreen.route)
                 }
 
                 is Response.Failure -> {
-                    _loadingState.value = false
-                    Log.d("SignUP",response.e)
                     postMessage(response.e)
+                    openAndPopUp(StoriesListScreen.route, SignUpScreen.route)
                 }
             }
         }
@@ -101,7 +99,7 @@ class SignUpScreenViewModel(
 
     fun onSignUpClick(openAndPopUp: (String, String) -> Unit) {
 
-          if (!email.isValidEmail()) {
+        /*  if (!email.isValidEmail()) {
                    postMessage(R.string.email_error.toString())
                    return
                }
@@ -109,7 +107,7 @@ class SignUpScreenViewModel(
                if (!password.isValidPassword()) {
                   postMessage(R.string.password_error.toString())
                    return
-               }
+               }*/
 
 
         signUpWithEmailAndPassword(email, password, username,openAndPopUp)

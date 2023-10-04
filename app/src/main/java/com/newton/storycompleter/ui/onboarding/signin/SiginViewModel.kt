@@ -94,17 +94,7 @@ class SignInScreenViewModel(
     }
 
     fun onSignInClick(openAndPopUp: (String, String) -> Unit) {
-        if (!email.isValidEmail()) {
-            // SnackbarManager.showMessage(AppText.email_error)
-            postMessage(R.string.email_error.toString())
-            return
-        }
 
-        if (password.isBlank()) {
-            //SnackbarManager.showMessage(AppText.empty_password_error)
-            postMessage(R.string.empty_password_error.toString())
-            return
-        }
 
         signInWithEmailAndPassword(email, password, openAndPopUp)
 

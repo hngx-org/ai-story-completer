@@ -152,21 +152,23 @@ fun StoryAppNavHost(
             )
         }
         composable(route = SignInScreen.route) {
-            SignInFullScreen(
-                navigateToSignUpScreen = {
-                    navController.navigate(route = SignUpScreen.route)
-                }) {
-                navController.navigate(route = StoriesListScreen.route) {
-                    popUpTo(SignInScreen.route) { inclusive = true }
-                }
-            }
+            SignInFullScreen(navigateToSignUpScreen = { navController.navigate(route = SignUpScreen.route) }
+            , openAndPopUp = {  route,popUpTo ->
+                    navController.navigate(route){
+                        launchSingleTop = true
+                        popUpTo(popUpTo) { inclusive = true }
+                    }
+                } )
         }
         composable(route = SignUpScreen.route) {
-            SignUpFullScreen(openAndPopUp = {
+            SignUpFullScreen(openAndPopUp = { route,popUpTo->
+                navController.navigate(route){
+                    launchSingleTop = true
+                    popUpTo(popUpTo) { inclusive = true }
+                }
+            }, navigateBack =  {
                 navController.navigate(route = SignInScreen.route)
-            }) {
-                navController.navigate(route = SignInScreen.route)
-            }
+            })
         }
 
         /*   mainScreenGraph(navController)
@@ -175,38 +177,26 @@ fun StoryAppNavHost(
 
 
     }
-}
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AiStoryApp(
-    modifier: Modifier = Modifier,
-    navController: NavHostController
-) {
+    fun popUp() {
+        navController.popBackStack()
+    }
 
-    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    fun navigate(route: String) {
+        navController.navigate(route) { launchSingleTop = true }
+    }
 
-    Scaffold(
-        modifier = modifier.fillMaxSize(),
-        content = { offsetPadding ->
-
-            StoryAppNavHost(
-                modifier = Modifier
-                    .padding(offsetPadding)
-                    .fillMaxSize(),
-                navController = navController
-            )
-        },
-        bottomBar = {
-            Row {
-
-            }
-        },
-
-        snackbarHost = {
-            SnackbarHostState()
+    fun navigateAndPopUp(route: String, popUp: String) {
+        navController.navigate(route) {
+            launchSingleTop = true
+            popUpTo(popUp) { inclusive = true }
         }
-    )
-}
+    }
 
-class MockNavController(ctx: Context) : NavHostController(ctx)
+    fun clearAndNavigate(route: String) {
+        navController.navigate(route) {
+            launchSingleTop = true
+            popUpTo(0) { inclusive = true }
+        }
+    }
+}

@@ -48,7 +48,7 @@ fun StoriesScreen(
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 modifier = modifier.padding(end = 16.dp, bottom = 16.dp),
-                onClick = onCreateStoryClick,
+                onClick = { onCreateStoryClick() },
                 content = {
                     Icon(
                         imageVector = Icons.Default.Edit,
@@ -60,7 +60,9 @@ fun StoriesScreen(
         },
         content = { contentPadding ->
 
-            Box(modifier = Modifier.padding(contentPadding).fillMaxSize()){
+            Box(modifier = Modifier
+                .padding(contentPadding)
+                .fillMaxSize()){
                 if (state.loading)
                     CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 else if (state.stories.isEmpty())

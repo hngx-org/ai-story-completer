@@ -16,18 +16,22 @@ import com.newton.storycompleter.ui.auth.AuthService
 import com.newton.storycompleter.ui.auth.Response
 import com.newton.storycompleter.ui.onboarding.signin.components.isValidEmail
 import com.newton.storycompleter.ui.onboarding.signin.components.isValidPassword
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
-class SignUpScreenViewModel(
-    application: Application
-) : AndroidViewModel(application) {
+@HiltViewModel
+class SignUpScreenViewModel @Inject constructor(
+    private  val authService: AuthService
+): ViewModel()
+{
 
     private var _loadingState = MutableLiveData(false)
     val loading: LiveData<Boolean> = _loadingState
-    val authService = AuthService(application.applicationContext)
+
 
     data class SignUpUiState(
         val username: String = "",
@@ -116,14 +120,3 @@ class SignUpScreenViewModel(
 
 }
 
-class SignUpScreenViewModelFactory(
-    private val application: Application
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        @Suppress("UNCHECKED_CAST")
-        if (modelClass.isAssignableFrom(SignUpScreenViewModel::class.java)) {
-            return SignUpScreenViewModel(application) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-}

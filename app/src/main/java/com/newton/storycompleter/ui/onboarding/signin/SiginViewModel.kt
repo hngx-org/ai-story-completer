@@ -1,6 +1,7 @@
 package com.newton.storycompleter.ui.onboarding.signin
 
 import android.app.Application
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -16,14 +17,19 @@ import com.newton.storycompleter.app.navigation.StoriesListScreen
 import com.newton.storycompleter.ui.auth.AuthService
 import com.newton.storycompleter.ui.auth.Profile
 import com.newton.storycompleter.ui.auth.Response
+import com.newton.storycompleter.ui.onboarding.signin.Utils.Companion.showMessage
 import com.newton.storycompleter.ui.onboarding.signin.components.isValidEmail
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SignInScreenViewModel(
-    application: Application
-) : AndroidViewModel(application) {
+@HiltViewModel
+class SignInScreenViewModel @Inject constructor(
+    private  val authService: AuthService,private val context: Context
+): ViewModel()
+{
 
     private var _profileState = MutableLiveData<Profile>()
     val profile: LiveData<Profile> = _profileState
@@ -35,7 +41,6 @@ class SignInScreenViewModel(
     private var _iserror = MutableLiveData(false)
     val iserror: LiveData<Boolean> = _iserror
 
-    val authService = AuthService(application.applicationContext)
 
     private val _message = MutableStateFlow("")
     val message: StateFlow<String> = _message
@@ -57,11 +62,13 @@ class SignInScreenViewModel(
             val response =authService.SignIn(email, password)
             when (response) {
                 is Response.Success -> {
+                    showMessage(context,response.data.toString())
                     postMessage(response.data.message + response.data.data.email)
                    openAndPopUp(StoriesListScreen.route,SignInScreen.route)
                 }
                 is Response.Failure -> {
                     _iserror.value =true
+                    showMessage(context,response.e)
                   postMessage( response.e)
                 }
             }
@@ -105,14 +112,3 @@ class SignInScreenViewModel(
 
 }
 
-class SignInScreenViewModelFactory(
-    private val application: Application
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        @Suppress("UNCHECKED_CAST")
-        if (modelClass.isAssignableFrom(SignInScreenViewModel::class.java)) {
-            return SignInScreenViewModel(application) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-}

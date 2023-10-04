@@ -1,12 +1,12 @@
 package com.newton.storycompleter.di
 
-import android.content.Context
+import android.app.Application
 import androidx.room.Room
-import com.newton.storycompleter.data.StoryCompleterDatabase
+import com.newton.storycompleter.app.data.local.StoryCompleterDatabase
+import com.newton.storycompleter.repository.StoryRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -16,10 +16,21 @@ import javax.inject.Singleton
 
     @Provides
     @Singleton
-    fun provideAppDatabase(@ApplicationContext context: Context): StoryCompleterDatabase =
-        Room.databaseBuilder(context, StoryCompleterDatabase::class.java,"storyCompleter_db")
-            .fallbackToDestructiveMigration()
-            .build()
+    fun provideAppDatabase(application: Application): StoryCompleterDatabase {
+        return Room.databaseBuilder(
+            context = application,
+            klass = StoryCompleterDatabase::class.java,
+            name = StoryCompleterDatabase::class.simpleName
+        ).build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideStoryRepository(storyCompleterDatabase: StoryCompleterDatabase): StoryRepository {
+        return StoryRepository(
+            dao = storyCompleterDatabase.storyDao()
+        )
+    }
     /*@Module
     @InstallIn(SingletonComponent::class)
     interface RepoDataModule{

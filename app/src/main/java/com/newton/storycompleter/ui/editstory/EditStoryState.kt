@@ -1,6 +1,6 @@
 package com.newton.storycompleter.ui.editstory
 
-import com.newton.storycompleter.data.Story
+import com.newton.storycompleter.app.data.local.Story
 
 data class EditStoryState(
     val story: Story? = null,
@@ -13,7 +13,7 @@ data class EditStoryState(
 
 data class PremiumFeatures(
     val creativityIndex: CreativeIndex = CreativeIndex.Balanced,
-    val candidateCount: Int = 2,
+    val candidateCount: Int = 1,
     val generatedWords: Int = 50, //words per Generation
 )
 

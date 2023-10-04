@@ -17,24 +17,24 @@ import javax.inject.Inject
 class ReadingModeViewModel @Inject constructor(
     private val repository: StoryRepository
 ) : ViewModel() {
-    private val storyId = MutableStateFlow<Int?>(null)
+    private val storyId = MutableStateFlow(-1)
 
     val story = storyId.map { id ->
         when (id) {
-            null -> Story(title = "", content = "")
+            -1 -> Story(title = "", content = "")
             else -> repository.getStory(id) ?: Story(title = "", content = "")
         }
     }.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5_000),
-        initialValue = Story(title = "", content = ""),
+        initialValue = Story(title = "story", content = "story_detail"),
     )
 
     fun getStory(storyId: Int) {
         this.storyId.update { storyId }
     }
 
-    fun deleteBook(story: Story) {
+    fun deleteStory(story: Story) {
         viewModelScope.launch {
             repository.deleteStory(story)
         }

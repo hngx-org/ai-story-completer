@@ -1,9 +1,11 @@
 package com.newton.storycompleter.di
 
 import android.app.Application
+import android.content.Context
 import androidx.room.Room
 import com.newton.storycompleter.app.data.local.StoryCompleterDatabase
 import com.newton.storycompleter.repository.StoryRepository
+import com.newton.storycompleter.ui.auth.AuthService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,6 +33,12 @@ import javax.inject.Singleton
             dao = storyCompleterDatabase.storyDao()
         )
     }
+    @Provides
+    fun provideContext(application: Application): Context = application.applicationContext
+
+
+    @Provides
+    fun provideAuthService(application: Application):AuthService = AuthService(context = application.applicationContext )
     /*@Module
     @InstallIn(SingletonComponent::class)
     interface RepoDataModule{

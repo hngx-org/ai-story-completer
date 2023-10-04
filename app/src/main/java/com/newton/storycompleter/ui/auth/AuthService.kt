@@ -7,8 +7,11 @@ import com.shegs.hng_auth_library.model.LoginRequest
 import com.shegs.hng_auth_library.model.LogoutResponse
 import com.shegs.hng_auth_library.model.SignupRequest
 import com.shegs.hng_auth_library.network.ApiResponse
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class AuthService(context: Context) {
+@Singleton
+class AuthService @Inject constructor(context: Context) {
 
     private val apiService = AuthLibrary.createAuthService()
     private val dataStoreRepository = AuthLibrary.createDataStoreRepository(context)
@@ -54,7 +57,7 @@ class AuthService(context: Context) {
 
     }
 
-    suspend fun UserProfile(): Response<AuthResponse> {
+    suspend fun userProfile(): Response<AuthResponse> {
         val profileRepository = AuthLibrary.createProfileRepository(apiService)
         val result: ApiResponse<AuthResponse> = profileRepository.profile()
 

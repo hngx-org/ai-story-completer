@@ -5,10 +5,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.newton.storycompleter.ui.api.AiCallback
-import com.newton.storycompleter.ui.api.AiRepository
-import kotlinx.coroutines.launch
+import com.newton.storycompleter.app.data.remote.api.AiCallback
+import com.newton.storycompleter.app.data.remote.api.AiRepository
 
 class AiStoriesViewModel : ViewModel() {
 

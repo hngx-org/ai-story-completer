@@ -1,7 +1,6 @@
 package com.newton.storycompleter.app.navigation
 
 import android.content.Context
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -9,20 +8,25 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.navArgument
+import com.newton.storycompleter.app.data.local.Story
 import com.newton.storycompleter.ui.editstory.EditStoryScreen
 import com.newton.storycompleter.ui.editstory.EditStoryViewModel
 import com.newton.storycompleter.ui.onboarding.signin.SignInFullScreen
 import com.newton.storycompleter.ui.onboarding.signup.SignUpFullScreen
+import com.newton.storycompleter.ui.readingmode.ReadModeScreen
+import com.newton.storycompleter.ui.readingmode.ReadingModeViewModel
 import com.newton.storycompleter.ui.stories.StoriesScreen
 import com.newton.storycompleter.ui.stories.StoriesViewModel
 
@@ -38,7 +42,6 @@ fun StoryAppNavHost(
         navController = navController,
         startDestination = SplashScreen.route
     ) {
-        // TODO : Add your navigation graph as appropriate
 
         composable(route = SplashScreen.route) {
             com.newton.storycompleter.ui.onboarding.SplashScreen(onNext = {
@@ -49,23 +52,41 @@ fun StoryAppNavHost(
             })
         }
         composable(route = StoriesListScreen.route) {
-            val storiesViewModel:StoriesViewModel = hiltViewModel()
+            val storiesViewModel: StoriesViewModel = hiltViewModel()
             val storyListState by storiesViewModel.state.collectAsState()
-            StoriesScreen(onStoryClick = {
 
-                navController.navigate(route = ReadingModeScreen.route)
+            val onStoryClicked = remember {
+                { story: Story ->
+                    navController.navigate("${ReadingModeScreen.route}/${story.id}")
+                    {
+                        launchSingleTop = true
+                    }
+                }
+            }
 
-            }, onCreateStoryClick = {
-                navController.navigate(route = EditStoryScreen.route)
-            },
-                state =storyListState
+            StoriesScreen(
+                onStoryClick = onStoryClicked,
+                onCreateStoryClick = {
+                    navController.navigate(route = EditStoryScreen.routeWithArg)
+                },
+                state = storyListState
             )
         }
 
-        composable(route = EditStoryScreen.route) {
+        composable(
+            route = EditStoryScreen.routeWithArg,
+            arguments = listOf(
+                navArgument(EditStoryScreen.idArg.toString())
+                { type = NavType.IntType}
+            )) { backStackEntry ->
 
-            val viewModel:EditStoryViewModel = hiltViewModel()
+            val viewModel: EditStoryViewModel = hiltViewModel()
             val state = viewModel.state.collectAsState().value
+
+            LaunchedEffect(key1 = Unit, block = {
+                backStackEntry.arguments?.getInt(EditStoryScreen.idArg.toString())
+                    ?.let { viewModel.getStory(it) }
+            })
 
             val onClose: () -> Unit = remember {
                 {
@@ -73,11 +94,18 @@ fun StoryAppNavHost(
                 }
             }
 
+            val onFinish: () -> Unit = remember {
+                {
+                    viewModel.saveGeneratedStory()
+                    onClose()
+                }
+            }
+
             EditStoryScreen(
                 state = state,
                 updateState = viewModel::updateState,
                 isEdit = false,
-                onFinishClick = { viewModel.saveGeneratedStory(navController,state.story!!)},
+                onFinishClick = onFinish,
                 onGenerateClick = viewModel::generateText,
                 onClose = onClose,
                 onDecreaseCandidate = { },
@@ -87,10 +115,41 @@ fun StoryAppNavHost(
                 onPremiumClicked = { }
             )
         }
-        composable(route = ReadingModeScreen.route) {
-            Column() {
+        composable(
+            route = ReadingModeScreen.routeWithArg,
+            arguments = listOf(
+                navArgument(ReadingModeScreen.idArg.toString())
+                { type = NavType.IntType }
+            )
+        ) { backStackEntry ->
 
+            val viewModel: ReadingModeViewModel = hiltViewModel()
+
+            LaunchedEffect(key1 = Unit, block = {
+                backStackEntry.arguments?.getInt(ReadingModeScreen.idArg.toString())
+                    ?.let { viewModel.getStory(it) }
+            })
+
+
+            val onBack: () -> Unit = remember {
+                {
+                    navController.navigateUp()
+                }
             }
+
+            val onEdit: () -> Unit = remember {
+                {
+                    navController.navigate(EditStoryScreen.route)
+                }
+            }
+            val story = viewModel.story.collectAsState().value
+
+            ReadModeScreen(
+                onBack = onBack,
+                onDelete = { },
+                onEdit = onEdit,
+                story = story
+            )
         }
         composable(route = SignInScreen.route) {
             SignInFullScreen(navigateToSignUpScreen = { navController.navigate(route = SignUpScreen.route) }

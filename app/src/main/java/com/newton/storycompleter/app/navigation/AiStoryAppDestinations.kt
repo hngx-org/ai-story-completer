@@ -14,10 +14,14 @@ object StoriesListScreen: AiStoryAppDestination {
 }
 object EditStoryScreen: AiStoryAppDestination {
     override val route="ai_edit_story"
+    val idArg: Int? = null
+    val routeWithArg = "${route}/{$idArg}"
     // TODO : Add other information for this route e.g any navigation argument needed
 }
 object ReadingModeScreen: AiStoryAppDestination {
     override val route="reading_mode"
+    val idArg: Int? = null
+    val routeWithArg = "${route}/{$idArg}"
     // TODO : Add other information for this route e.g any navigation argument needed
 }
 object SignInScreen:AiStoryAppDestination{

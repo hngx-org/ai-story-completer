@@ -1,4 +1,4 @@
-package com.newton.storycompleter.data
+package com.newton.storycompleter.app.data.local
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

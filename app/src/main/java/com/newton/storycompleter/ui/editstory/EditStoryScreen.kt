@@ -1,7 +1,6 @@
 package com.newton.storycompleter.ui.editstory
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,8 +34,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.newton.storycompleter.R
+import com.newton.storycompleter.app.data.local.Story
 import com.newton.storycompleter.app.theme.StoryCompleterTheme
-import com.newton.storycompleter.data.Story
 import com.newton.storycompleter.ui.editstory.bottomSheet.SettingBottomSheet
 import kotlinx.coroutines.launch
 
@@ -106,6 +105,7 @@ fun EditStoryScreen(
                                 modifier = modifier.padding(12.dp),
                                 verticalArrangement = Arrangement.spacedBy(10.dp),
                                 content = {
+                                    val containerColor = Color(0xFFFFFFFF)
                                     TextField(
                                         modifier = modifier
                                             .fillMaxWidth()
@@ -126,8 +126,10 @@ fun EditStoryScreen(
                                                 style = MaterialTheme.typography.bodySmall
                                             )
                                         },
-                                        colors = TextFieldDefaults.textFieldColors(
-                                            containerColor = Color(0xFFFFFFFF)
+                                        colors = TextFieldDefaults.colors(
+                                            focusedContainerColor = containerColor,
+                                            unfocusedContainerColor = containerColor,
+                                            disabledContainerColor = containerColor,
                                         )
                                     )
 
@@ -161,7 +163,7 @@ fun EditStoryScreen(
                                     .padding(0.dp)
                                     .width(114.dp)
                                     .height(40.dp) ,
-                            onClick =  {onGenerateClick.invoke(state.story!!.content)} ,
+                            onClick =  {onGenerateClick.invoke(state.story.toString())} ,
                             content = {
                                 Text(
                                     text = stringResource(id = R.string.generate),

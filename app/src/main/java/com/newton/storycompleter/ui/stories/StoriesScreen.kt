@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.CircularProgressIndicator
@@ -27,28 +26,21 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.newton.storycompleter.AiStoriesViewModel
 import com.newton.storycompleter.R
+import com.newton.storycompleter.app.data.local.Story
 import com.newton.storycompleter.app.theme.StoryCompleterTheme
-import com.newton.storycompleter.data.Story
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StoriesScreen(
     modifier: Modifier = Modifier,
-    onStoryClick: (Int) -> Unit, //Todo add state
-    onCreateStoryClick: () -> Unit, //Todo navigate to the next screen
+    onStoryClick: (Story) -> Unit,
+    onCreateStoryClick: () -> Unit,
     state: StoryListState
 ) {
-/*val stories = listOf( "The Lost City",
-        "The Secret of the Island",
-        "The Curse of the Castle",
-        "The Haunted Mansion",
-        "The Mysterious Stranger")*/
-    val scrollBehaviour = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    val viewModel = AiStoriesViewModel()
 
+    val scrollBehaviour = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehaviour.nestedScrollConnection),
@@ -88,14 +80,14 @@ fun StoriesScreen(
 fun StoryList(
     modifier: Modifier = Modifier,
     stories:List<Story>,
-    onStoryClick: (Int) -> Unit
+    onStoryClick: (Story) -> Unit
 ) {
     LazyColumn(
         modifier = modifier,
         contentPadding = PaddingValues(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         content = {
-            itemsIndexed(stories) {index,story->
+            items(stories) {story->
                 StoryItem(
                     modifier = modifier.animateContentSize(
                         animationSpec = tween(
@@ -103,8 +95,8 @@ fun StoryList(
                             easing = LinearOutSlowInEasing
                         )
                     ),
-                    storyTitle = story.title,
-                    onItemClick = {onStoryClick(index)},
+                    story = story,
+                    onItemClick = onStoryClick,
                 )
             }
         },

@@ -2,8 +2,8 @@ package com.newton.storycompleter.ui.stories
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.newton.storycompleter.Repository.StoryRepository
-import com.newton.storycompleter.data.Story
+import com.newton.storycompleter.app.data.local.Story
+import com.newton.storycompleter.repository.StoryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

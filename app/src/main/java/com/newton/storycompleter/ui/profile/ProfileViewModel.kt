@@ -2,6 +2,7 @@ package com.newton.storycompleter.ui.profile
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -41,10 +42,13 @@ class ProfileViewModel @Inject constructor(
            val response = authService.userProfile()
             when (response) {
                 is Response.Success -> {
-                  _profileState.value =  _profileState.value?.copy(email =response.data.data.email )
+                    Log.d("Profile",response.data.data.email)
+                  _profileState.value =  Profile(email = response.data.data.email, id = response.data.data
+                      .id, name = response.data.data.name, credit = response.data.data.credits)
+                    Log.d("Profile details","${profile.value}")
                 }
                 is Response.Failure -> {
-
+                    Log.d("Profile",response.e)
                     postMessage( response.e)
                 }
             }

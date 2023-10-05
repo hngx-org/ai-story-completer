@@ -19,6 +19,7 @@ import com.newton.storycompleter.ui.auth.Profile
 import com.newton.storycompleter.ui.auth.Response
 import com.newton.storycompleter.ui.onboarding.signin.Utils.Companion.showMessage
 import com.newton.storycompleter.ui.onboarding.signin.components.isValidEmail
+import com.shegs.hng_auth_library.repositories.DataStoreRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,7 +28,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignInScreenViewModel @Inject constructor(
-    private  val authService: AuthService,private val context: Context
+    private  val authService: AuthService,private val context: Context, private val dataStoreRepository : DataStoreRepository
 ): ViewModel()
 {
 
@@ -62,6 +63,7 @@ class SignInScreenViewModel @Inject constructor(
             val response =authService.SignIn(email, password)
             when (response) {
                 is Response.Success -> {
+                    dataStoreRepository.saveUserID(response.data.data.id)
                     showMessage(context,response.data.toString())
                     postMessage(response.data.message + response.data.data.email)
                    openAndPopUp(StoriesListScreen.route,SignInScreen.route)

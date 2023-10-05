@@ -7,14 +7,15 @@ import com.shegs.hng_auth_library.model.LoginRequest
 import com.shegs.hng_auth_library.model.LogoutResponse
 import com.shegs.hng_auth_library.model.SignupRequest
 import com.shegs.hng_auth_library.network.ApiResponse
+import com.shegs.hng_auth_library.network.RetrofitClient
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class AuthService @Inject constructor(context: Context) {
 
-    private val apiService = AuthLibrary.createAuthService()
-    private val dataStoreRepository = AuthLibrary.createDataStoreRepository(context)
+   val apiService = AuthLibrary.createAuthService()
+    val dataStoreRepository = AuthLibrary.createDataStoreRepository(context)
 
     suspend fun SignUp(name: String, email: String, password: String): Response<AuthResponse>  {
 
@@ -60,7 +61,6 @@ class AuthService @Inject constructor(context: Context) {
     suspend fun userProfile(): Response<AuthResponse> {
         val profileRepository = AuthLibrary.createProfileRepository(apiService)
         val result: ApiResponse<AuthResponse> = profileRepository.profile()
-
         return when(result){
             is ApiResponse.Success -> Response.Success(result.data)
             is ApiResponse.Error -> Response.Failure(result.message)

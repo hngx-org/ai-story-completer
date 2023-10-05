@@ -54,6 +54,7 @@ fun ProfileScreen(
     openAndPopUp: (String, String) -> Unit
 ) {
     val viewModel: ProfileViewModel = hiltViewModel()
+    val profile by viewModel.profile.observeAsState()
     Surface(color = MaterialTheme.colorScheme.background) {
         LazyColumn {
             item {
@@ -91,7 +92,10 @@ fun ProfileScreen(
                 SubscriptionSection()
             }
             item {
-                Spacer(modifier = Modifier.height(40.dp))
+                Spacer(modifier = Modifier.height(20.dp))
+                Text(text = profile?.id ?: "",)
+                Text(text = profile?.name ?: "",)
+                Text(text = profile?.credit.toString() ?: "",)
             }
             item {
                 LogoutButton(viewModel = viewModel,onClick = openAndPopUp)

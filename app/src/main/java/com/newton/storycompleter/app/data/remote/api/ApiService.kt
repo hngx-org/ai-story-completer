@@ -39,7 +39,7 @@ class AiRepository {
             .addHeader("Content-Type", "application/json")
             .addHeader(
                 "Authorization",
-                "Bearer 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"
+                "Bearer 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"
             )
             .post(body.toRequestBody("application/json".toMediaTypeOrNull()))
             .build()

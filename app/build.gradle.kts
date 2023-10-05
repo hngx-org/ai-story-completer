@@ -71,29 +71,31 @@ dependencies {
 
 
     //Compose Navigation
-    implementation ("androidx.navigation:navigation-compose:2.7.3")
+    implementation("androidx.navigation:navigation-compose:2.7.3")
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.3")
 
     //okhttp3
-    implementation ("com.squareup.okhttp3:okhttp:4.11.0")
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
 
     //Room Database
-    val  roomVersion = "2.6.0-rc01"
+    val roomVersion = "2.6.0-rc01"
     implementation("androidx.room:room-runtime:$roomVersion")
-    kapt ("androidx.room:room-compiler:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
 
     // Hilt
     implementation("com.google.dagger:hilt-android:2.48")
-    kapt ("com.google.dagger:hilt-android-compiler:2.48")
-    implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
+    kapt("com.google.dagger:hilt-android-compiler:2.48")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     //Authentication
-    implementation ("com.github.hngx-org:mirage-kotlin-auth-library:2.0.0")
+    implementation ("com.github.hngx-org:mirage-kotlin-auth-library:3.0.0")
 
     //Livedata compose
-    implementation ("androidx.compose.runtime:runtime-livedata:1.5.1")
+    implementation("androidx.compose.runtime:runtime-livedata:1.5.1")
 
+    //openAi
+    implementation("com.github.hngx-org:openai-api-library:0.1.3")
 
 }
 

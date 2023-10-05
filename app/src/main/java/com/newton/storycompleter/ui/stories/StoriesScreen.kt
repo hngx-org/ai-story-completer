@@ -36,6 +36,7 @@ import com.newton.storycompleter.app.theme.StoryCompleterTheme
 fun StoriesScreen(
     modifier: Modifier = Modifier,
     onStoryClick: (Story) -> Unit,
+    onProfileClick: () -> Unit,
     onCreateStoryClick: () -> Unit,
     state: StoryListState
 ) {
@@ -44,7 +45,7 @@ fun StoriesScreen(
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehaviour.nestedScrollConnection),
-        topBar = { StoriesTopBar(scrollBehavior = scrollBehaviour) },
+        topBar = { StoriesTopBar(scrollBehavior = scrollBehaviour,onClick =onProfileClick) },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 modifier = modifier.padding(end = 16.dp, bottom = 16.dp),
@@ -117,7 +118,8 @@ private fun PreviewStoriesScreen() {
         StoriesScreen(
             onStoryClick = { },
             onCreateStoryClick = { },
-            state = StoryListState(stories = stories)
+            state = StoryListState(stories = stories),
+            onProfileClick = {}
         )
 
     }

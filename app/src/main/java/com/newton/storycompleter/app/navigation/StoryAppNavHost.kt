@@ -25,6 +25,7 @@ import com.newton.storycompleter.ui.editstory.EditStoryScreen
 import com.newton.storycompleter.ui.editstory.EditStoryViewModel
 import com.newton.storycompleter.ui.onboarding.signin.SignInFullScreen
 import com.newton.storycompleter.ui.onboarding.signup.SignUpFullScreen
+import com.newton.storycompleter.ui.profile.ProfileScreen
 import com.newton.storycompleter.ui.readingmode.ReadModeScreen
 import com.newton.storycompleter.ui.readingmode.ReadingModeViewModel
 import com.newton.storycompleter.ui.stories.StoriesScreen
@@ -78,7 +79,8 @@ fun StoryAppNavHost(
                         EditStoryScreen.routeWithArg.replace("{${EditStoryScreen.idArg}}", "-1")
                     navController.navigate(route = routeWithArg)
                 },
-                state = storyListState
+                state = storyListState,
+                onProfileClick = {navController.navigate(route = ProfileScreen.route)}
             )
         }
 
@@ -179,23 +181,37 @@ fun StoryAppNavHost(
             )
         }
         composable(route = SignInScreen.route) {
-            SignInFullScreen(navigateToSignUpScreen = { navController.navigate(route = SignUpScreen.route) }
-            , openAndPopUp = {  route,popUpTo ->
-                    navController.navigate(route){
+            SignInFullScreen(navigateToSignUpScreen = { navController.navigate(route = SignUpScreen.route) },
+                openAndPopUp = { route, popUpTo ->
+                    navController.navigate(route) {
                         launchSingleTop = true
                         popUpTo(popUpTo) { inclusive = true }
                     }
-                } )
+                })
         }
         composable(route = SignUpScreen.route) {
-            SignUpFullScreen(openAndPopUp = { route,popUpTo->
-                navController.navigate(route){
+            SignUpFullScreen(openAndPopUp = { route, popUpTo ->
+                navController.navigate(route) {
                     launchSingleTop = true
                     popUpTo(popUpTo) { inclusive = true }
                 }
-            }, navigateBack =  {
+            }, navigateBack = {
                 navController.navigate(route = SignInScreen.route)
             })
+        }
+
+        composable(route = ProfileScreen.route) {
+            ProfileScreen(
+                navigateBack = {
+                    navController.navigate(route = StoriesListScreen.route)
+                },
+                openAndPopUp = { route, popUpTo ->
+                    navController.navigate(route) {
+                        launchSingleTop = true
+                        popUpTo(popUpTo) { inclusive = true }
+                    }
+                }
+            )
         }
 
         /*   mainScreenGraph(navController)

@@ -1,7 +1,6 @@
 package com.newton.storycompleter.ui.onboarding.signup
 
 import android.app.Application
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -13,9 +12,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.newton.storycompleter.ui.onboarding.signin.SignInScreenViewModel
-import com.newton.storycompleter.ui.onboarding.signin.SignInScreenViewModelFactory
 import com.newton.storycompleter.ui.onboarding.signin.components.FullScreenLoaderComponent
 import kotlinx.coroutines.launch
 
@@ -28,8 +26,7 @@ fun SignUpFullScreen(
 ) {
 
     val context = LocalContext.current
-    val viewModel: SignUpScreenViewModel = viewModel(
-        factory = SignUpScreenViewModelFactory(context.applicationContext as Application))
+    val viewModel: SignUpScreenViewModel = hiltViewModel()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 

@@ -32,3 +32,7 @@ object SignUpScreen:AiStoryAppDestination{
     override val route="signup"
     // TODO : Add other information for this route e.g any navigation argument needed
 }
+object ProfileScreen:AiStoryAppDestination{
+    override val route="profile"
+    // TODO : Add other information for this route e.g any navigation argument needed
+}

@@ -163,7 +163,7 @@ fun EditStoryScreen(
                                     .padding(0.dp)
                                     .width(114.dp)
                                     .height(40.dp) ,
-                            onClick =  {onGenerateClick.invoke(state.story.toString())} ,
+                            onClick =  {onGenerateClick.invoke(state.story!!.content)} ,
                             content = {
                                 Text(
                                     text = stringResource(id = R.string.generate),

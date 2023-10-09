@@ -1,5 +1,6 @@
 package com.newton.storycompleter.app.data.remote.api
 
+import android.util.Log
 import com.newton.storycompleter.BuildConfig
 import okhttp3.Call
 import okhttp3.Callback
@@ -8,6 +9,8 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
+import org.json.JSONArray
+import org.json.JSONObject
 import java.io.IOException
 
 
@@ -29,8 +32,7 @@ class AiRepository {
                 "model": "gpt-3.5-turbo-instruct",
                 "prompt": "$prompt",
                 "temperature": 0.5,
-                "max_tokens": 50,
-                "
+                "max_tokens": 50
             }
             """.trimIndent()
 
@@ -50,22 +52,16 @@ class AiRepository {
 
             override fun onResponse(call: Call, response: Response) {
                 val responseText = response.body?.string() ?: ""
-                val textResult = extractTextAfterLastPunctuation(responseText)
-                callback.onResponse(textResult)
+                val jsonObject = JSONObject(responseText)
+                Log.d("ResponseCheck", responseText)
+                val jsonArray: JSONArray = jsonObject.getJSONArray("choices")
+
+                val textResult = jsonArray.getJSONObject(0).getString("text")
+                val trimResult = textResult.substringBeforeLast('.')
+                callback.onResponse("$trimResult.")
             }
         }
         )
-    }
-
-    private fun extractTextAfterLastPunctuation(responseText: String): String {
-        val sentences = responseText.split("[.?!]".toRegex())
-        val textResult = sentences.takeWhile { it.isNotBlank() }.joinToString(separator = ".")
-
-        return if (textResult.isNotEmpty()) {
-            "$textResult."
-        } else {
-            textResult
-        }
     }
 }
 

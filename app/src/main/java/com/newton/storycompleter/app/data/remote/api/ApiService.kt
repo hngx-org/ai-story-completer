@@ -1,8 +1,7 @@
 package com.newton.storycompleter.app.data.remote.api
 
-import android.content.Context
 import android.util.Log
-import com.shegs.hng_auth_library.authlibrary.AuthLibrary
+import com.newton.storycompleter.BuildConfig
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -21,7 +20,10 @@ interface AiCallback {
 }
 
 class AiRepository {
-    fun generateText(prompt: String, callback: AiCallback) {
+    fun generateText(
+        prompt: String,
+        callback: AiCallback
+    ) {
         val client = OkHttpClient()
 
         val body =
@@ -39,7 +41,7 @@ class AiRepository {
             .addHeader("Content-Type", "application/json")
             .addHeader(
                 "Authorization",
-                "Bearer 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"
+                "Bearer ${BuildConfig.AI_COMPLETION_API_KEY}"
             )
             .post(body.toRequestBody("application/json".toMediaTypeOrNull()))
             .build()
@@ -55,16 +57,11 @@ class AiRepository {
                 val jsonArray: JSONArray = jsonObject.getJSONArray("choices")
 
                 val textResult = jsonArray.getJSONObject(0).getString("text")
-                callback.onResponse(textResult)
-
+                val trimResult = textResult.substringBeforeLast('.')
+                callback.onResponse("$trimResult.")
             }
-        })
-
-
-        /* val response = client.newCall(request).execute()
-         Log.d("API Call", "${response.body?.string()}")
-         return response.body?.string() ?: ""*/
-
+        }
+        )
     }
 }
 

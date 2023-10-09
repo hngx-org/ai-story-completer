@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -20,7 +19,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -30,7 +29,7 @@ import com.newton.storycompleter.R
 import com.newton.storycompleter.app.data.local.Story
 import com.newton.storycompleter.app.theme.StoryCompleterTheme
 
-
+@Stable
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StoriesScreen(
@@ -38,8 +37,9 @@ fun StoriesScreen(
     onStoryClick: (Story) -> Unit,
     onProfileClick: () -> Unit,
     onCreateStoryClick: () -> Unit,
-    state: StoryListState
+    stories: List<Story>
 ) {
+
 
     val scrollBehaviour = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
@@ -64,16 +64,13 @@ fun StoriesScreen(
             Box(modifier = Modifier
                 .padding(contentPadding)
                 .fillMaxSize()){
-                if (state.loading)
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                else if (state.stories.isEmpty())
+                if (stories.isEmpty())
                     EmptyStoriesView()
                 else
                     StoryList(
-                        stories = state.stories,
+                        stories = stories,
                         onStoryClick = onStoryClick
                     )
-
             }
         }
     )
@@ -118,7 +115,7 @@ private fun PreviewStoriesScreen() {
         StoriesScreen(
             onStoryClick = { },
             onCreateStoryClick = { },
-            state = StoryListState(stories = stories),
+            stories =stories,
             onProfileClick = {}
         )
 

@@ -1,6 +1,5 @@
 package com.newton.storycompleter.ui.editstory
 
-import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,9 +12,6 @@ import com.newton.storycompleter.app.data.remote.api.AiCallback
 import com.newton.storycompleter.app.data.remote.api.AiRepository
 import com.newton.storycompleter.repository.StoryRepository
 import com.newton.storycompleter.ui.auth.AuthService
-import com.shegs.hng_auth_library.authlibrary.AuthLibrary
-import com.shegs.hng_auth_library.network.ApiService
-import com.shegs.hng_auth_library.repositories.DataStoreRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,25 +20,34 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class EditStoryViewModel @Inject constructor(private val storyRepository: StoryRepository,private val authService: AuthService) : ViewModel() {
+class EditStoryViewModel @Inject constructor(
+    private val storyRepository: StoryRepository,
+    private val authService: AuthService
+) : ViewModel() {
 
     private val _story = MutableStateFlow(Story(title = "", content = ""))
     private val _state = MutableStateFlow(EditStoryState())
     val state = _state.asStateFlow()
     private val openApiClient = OpenAiCaller
-    var id:String?  = null
+    var id: String? = null
 
 
-    init{
+    init {
         getId()
     }
+
     fun updateState(currentState: EditStoryState) {
         val words = countWords(currentState.story?.content!!)
         val buttonEnabled = currentState.wordCount > 14 && currentState.story.title.isNotEmpty()
 
         _state.update { it.copy(story = _story.value) }
         _state.update { currentState }
-        _story.update { it.copy(title = currentState.story.title, content = currentState.story.content) }
+        _story.update {
+            it.copy(
+                title = currentState.story.title,
+                content = currentState.story.content
+            )
+        }
         _state.update {
             it.copy(
                 wordCount = words,
@@ -69,6 +74,7 @@ class EditStoryViewModel @Inject constructor(private val storyRepository: StoryR
 
 
     var prompt2 = "give a title to this story,$generatedText"
+
     /* init  {
          Log.d("Api Respose","Test")
          generateText()
@@ -78,64 +84,66 @@ class EditStoryViewModel @Inject constructor(private val storyRepository: StoryR
     }
 
 
-
-    private fun getId(){
+    private fun getId() {
 
 
         viewModelScope.launch {
-            authService.dataStoreRepository.getUserID().collect{
-                id =it
-            }}
+            authService.dataStoreRepository.getUserID().collect {
+                id = it
+            }
+        }
     }
-    fun generateText(prompt:String) {
+
+    fun generateText(prompt: String) {
         val prompt1 = "Continue this story in less than 50 token:$prompt"
         Log.d("Prompt", prompt1)
-Log.d("UserId","$id")
+        Log.d("UserId", "$id")
         viewModelScope.launch {
-          /*  val response = openApiClient.generateChatResponse(prompt1, id!!)
-            _state.update {
-                it.copy(
+            /*  val response = openApiClient.generateChatResponse(prompt1, id!!)
+              _state.update {
+                  it.copy(
 
-                    story = state.value.story?.copy(content = state.value.story!!.content + response)
-                )
-            }*/
+                      story = state.value.story?.copy(content = state.value.story!!.content + response)
+                  )
+              }*/
 
-              repository.generateText(prompt1, object : AiCallback {
+            repository.generateText(prompt1, object : AiCallback {
 
-            override fun onResponse(response: String) {
+                override fun onResponse(response: String) {
 
-                _state.update {
-                    it.copy(
-
-                        story = state.value.story?.copy(content = state.value.story!!.content+response )
-                    )
+                    _state.update {
+                        it.copy(
+                           story = _state.value.story?.copy(content = _state.value.story!!.content + response)
+                        )
+                    }
+                    _story.update { it.copy(content = _state.value.story?.content ?: "") }
+                    Log.d("Api Response", response)
                 }
-                Log.d("Api Response",response)
-            }
 
-            override fun onFailure(e: Exception) {
-                Log.e("Api Response","error occur",e)
-            }
-        })
+                override fun onFailure(e: Exception) {
+                    Log.e("Api Response", "error occur", e)
+                }
+            })
         }
 
     }
-        fun saveGeneratedStory() {
-            viewModelScope.launch {
-                storyRepository.saveStory(_story.value)
-            }
-        }
 
-        fun getStory(storyId: Int) {
-            viewModelScope.launch {
-                val story = if (storyId == -1) {
-                    Story(title = "", content = "")
-                } else {
-                    storyRepository.getStory(storyId) ?: Story(title = "", content = "")
-                }
-                _story.update { story }
-                _state.update { it.copy(story = story) }
-            }
+    fun saveGeneratedStory() {
+        viewModelScope.launch {
+            storyRepository.saveStory(_story.value)
         }
+    }
+
+    fun getStory(storyId: Int) {
+        viewModelScope.launch {
+            val story = if (storyId == -1) {
+                Story(title = "", content = "")
+            } else {
+                storyRepository.getStory(storyId) ?: Story(title = "", content = "")
+            }
+            _story.update { story }
+            _state.update { it.copy(story = story) }
+        }
+    }
 
 }

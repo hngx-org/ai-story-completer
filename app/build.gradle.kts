@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -23,11 +26,18 @@ android {
     }
 
     buildTypes {
+        debug {
+            val properties = Properties()
+            val fileInputStream = FileInputStream(project.rootProject.file("local.properties"))
+            properties.load(fileInputStream)
+            val openAiApiKey = properties.getProperty("AI_COMPLETION_API_KEY")
+            buildConfigField(type = "String", name = "AI_COMPLETION_API_KEY", value = "\"$openAiApiKey\"")
+        }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            signingConfig = signingConfigs.getByName("debug")
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -40,6 +50,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"

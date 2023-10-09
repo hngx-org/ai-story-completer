@@ -1,16 +1,9 @@
 package com.newton.storycompleter.app.navigation
 
-import android.content.Context
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -18,7 +11,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import com.newton.storycompleter.app.data.local.Story
 import com.newton.storycompleter.ui.editstory.EditStoryScreen
@@ -54,7 +46,7 @@ fun StoryAppNavHost(
         }
         composable(route = StoriesListScreen.route) {
             val storiesViewModel: StoriesViewModel = hiltViewModel()
-            val storyListState by storiesViewModel.state.collectAsState()
+
 
             val onStoryClicked = remember {
                 { story: Story ->
@@ -79,7 +71,7 @@ fun StoryAppNavHost(
                         EditStoryScreen.routeWithArg.replace("{${EditStoryScreen.idArg}}", "-1")
                     navController.navigate(route = routeWithArg)
                 },
-                state = storyListState,
+                stories = storiesViewModel.state.collectAsState().value,
                 onProfileClick = {navController.navigate(route = ProfileScreen.route)}
             )
         }
@@ -167,12 +159,12 @@ fun StoryAppNavHost(
                 }
             }
 
-            val onDelete: () -> Unit = remember {
+            val onDelete: () -> Unit =
                 {
                    viewModel.deleteStory(story)
                     onBack()
                 }
-            }
+
             ReadModeScreen(
                 onBack = onBack,
                 onDelete = onDelete,

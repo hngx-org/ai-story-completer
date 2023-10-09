@@ -12,8 +12,6 @@ import com.newton.storycompleter.ui.auth.Profile
 import com.newton.storycompleter.ui.auth.Response
 import com.shegs.hng_auth_library.repositories.DataStoreRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,14 +32,6 @@ class SignInScreenViewModel @Inject constructor(
     val iserror: LiveData<Boolean> = _iserror
 
 
-    private val _message = MutableStateFlow("")
-    val message: StateFlow<String> = _message
-
-    fun postMessage(message: String) {
-        // Do something with the message
-        _message.value = message
-    }
-
 
     fun signInWithEmailAndPassword(
         email: String, password: String,
@@ -56,13 +46,11 @@ class SignInScreenViewModel @Inject constructor(
                 is Response.Success -> {
                     _loadingState.value = false
                     dataStoreRepository.saveUserID(response.data.data.id)
-                    postMessage(response.data.message + response.data.data.email)
                    openAndPopUp(StoriesListScreen.route,SignInScreen.route)
                 }
                 is Response.Failure -> {
                     _loadingState.value = false
                     _iserror.value =true
-                  postMessage( response.e)
                 }
             }
         }

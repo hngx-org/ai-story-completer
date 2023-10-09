@@ -131,7 +131,7 @@ fun EditStoryScreen(
                                             unfocusedContainerColor = containerColor,
                                             disabledContainerColor = containerColor,
                                         )
-                                    )
+                                     )
 
                                     Divider()
                                     Text(

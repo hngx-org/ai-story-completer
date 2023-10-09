@@ -46,10 +46,6 @@ class SignUpScreenViewModel @Inject constructor(
     private val _message = MutableStateFlow("")
     val message: StateFlow<String> = _message
 
-    fun postMessage(message: String) {
-        // Do something with the message
-        _message.value = message
-    }
 
     fun onUsernameChange(newValue: String) {
         uiState.value = uiState.value.copy(username = newValue)
@@ -81,7 +77,6 @@ class SignUpScreenViewModel @Inject constructor(
 
                 is Response.Failure -> {
                     _loadingState.value = false
-                    postMessage(response.e)
                     openAndPopUp(StoriesListScreen.route, SignUpScreen.route)
                 }
             }

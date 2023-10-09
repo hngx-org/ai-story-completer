@@ -1,24 +1,15 @@
 package com.newton.storycompleter.ui.onboarding.signin
 
-import android.app.Application
-import android.content.Context
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.newton.storycompleter.R
 import com.newton.storycompleter.app.navigation.SignInScreen
 import com.newton.storycompleter.app.navigation.StoriesListScreen
 import com.newton.storycompleter.ui.auth.AuthService
 import com.newton.storycompleter.ui.auth.Profile
 import com.newton.storycompleter.ui.auth.Response
-import com.newton.storycompleter.ui.onboarding.signin.Utils.Companion.showMessage
-import com.newton.storycompleter.ui.onboarding.signin.components.isValidEmail
 import com.shegs.hng_auth_library.repositories.DataStoreRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignInScreenViewModel @Inject constructor(
-    private  val authService: AuthService,private val context: Context, private val dataStoreRepository : DataStoreRepository
+    private  val authService: AuthService, private val dataStoreRepository : DataStoreRepository
 ): ViewModel()
 {
 
@@ -63,19 +54,19 @@ class SignInScreenViewModel @Inject constructor(
             val response =authService.SignIn(email, password)
             when (response) {
                 is Response.Success -> {
+                    _loadingState.value = false
                     dataStoreRepository.saveUserID(response.data.data.id)
-                    showMessage(context,response.data.toString())
                     postMessage(response.data.message + response.data.data.email)
                    openAndPopUp(StoriesListScreen.route,SignInScreen.route)
                 }
                 is Response.Failure -> {
+                    _loadingState.value = false
                     _iserror.value =true
-                    showMessage(context,response.e)
                   postMessage( response.e)
                 }
             }
         }
-        _loadingState.value = false
+
 
     }
 
